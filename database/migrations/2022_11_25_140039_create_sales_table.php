@@ -15,6 +15,11 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+//            $table->integer('sale_num')->unique();
+//            $table->date('date')->default(now());
+//            $table->foreignIdFor(\App\Models\Product::class)->constrained()->cascadeOnUpdate()->nullOnDelete();
+//            $table->string('created_by')->nullable();
+//            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }
