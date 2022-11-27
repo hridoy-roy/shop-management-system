@@ -6,6 +6,7 @@ use App\Models\ProductCategory;
 use App\Http\Requests\StoreProductCategoryRequest;
 use App\Http\Requests\UpdateProductCategoryRequest;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Session;
 
 class ProductCategoryController extends Controller
 {
@@ -19,6 +20,7 @@ class ProductCategoryController extends Controller
         $data = [
             'subTitle' => 'Product Category',
             'title' => 'Categories Info',
+            'categories' => ProductCategory::all(),
         ];
         return view('categories.create')->with($data);
     }
@@ -37,11 +39,13 @@ class ProductCategoryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \App\Http\Requests\StoreProductCategoryRequest $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function store(StoreProductCategoryRequest $request)
     {
-        //
+        ProductCategory::create(array_merge($request->validated(),['created_by'=>\Auth::user()->name]));
+        toastr()->success('Data has been saved successfully!');
+        return redirect()->back();
     }
 
     /**
