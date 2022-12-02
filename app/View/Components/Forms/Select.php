@@ -3,6 +3,7 @@
 namespace App\View\Components\Forms;
 
 use Illuminate\View\Component;
+use Illuminate\Http\Request;
 
 class Select extends Component
 {
@@ -10,7 +11,8 @@ class Select extends Component
     public string $name;
     public mixed $value;
     public string $required;
-    public array $options;
+    public string $targetColumn;
+    public mixed $options;
     //    public $inputId;
     //    public $inputClass;
     /**
@@ -18,13 +20,15 @@ class Select extends Component
      *
      * @return void
      */
-    public function __construct($label, $name,$options=[], $value = null, $required = true)
+
+    public function __construct($label, $name, $options, $required = true, $targetColumn = 'name',$value='')
     {
         $this->label = $label;
         $this->name = $name;
         $this->options = $options;
         $this->value = old($name, $value);
         $this->required = $required;
+        $this->targetColumn = $targetColumn;
     }
 
     /**
@@ -32,7 +36,7 @@ class Select extends Component
      *
      * @return \Illuminate\Contracts\View\View|\Closure|string
      */
-    public function render()
+    public function render(): \Illuminate\Contracts\View\View|string|\Closure
     {
         return view('components.forms.select');
     }

@@ -1,5 +1,4 @@
 @extends('layouts.master')
-
 @section('title')
     {{$title}}
 @endsection
@@ -22,25 +21,25 @@
                 <div class="card-body">
                     <h4 class="card-title mb-4">Category Create</h4>
 
-                    <form class="custom-validation" action="{{route('categories.store')}}" method="POST">
+                    <form class="custom-validation" action="{{route('categories.update',$category->id)}}" method="POST">
+                        @method('PUT')
                         @csrf
-                        {{--                        @dd($utility::$status)--}}
                         <x-forms.input label="Name" type="text" name="name"
-                                       placeholder="Enter Your First Name"></x-forms.input>
+                                       placeholder="Enter Your First Name" :value="$category->name"></x-forms.input>
                         <div class="row">
                             <div class="col-md-12">
                                 <x-forms.textarea label="Description" type="text" name="description"
-                                                  placeholder="Enter Your Category Description"></x-forms.textarea>
+                                                  placeholder="Enter Your Category Description"
+                                                  :value="$category->description"></x-forms.textarea>
                             </div>
                             <div class="col-md-4">
                                 <x-forms.select label="Status" name="status"
-                                                :options="$utility::$status"></x-forms.select>
-
+                                                :options="$utility::$status"
+                                                :value="$category->status" :required=false></x-forms.select>
                             </div>
-
                         </div>
                         <div>
-                            <button type="submit" class="btn btn-primary w-md">Submit</button>
+                            <button type="submit" class="btn btn-primary w-md">Update</button>
                         </div>
                     </form>
                 </div>
@@ -74,21 +73,14 @@
                                         <th scope="row">{{++$loop->index}}</th>
                                         <td>{{$category->name}}</td>
                                         <td>{{$category->description}}</td>
-                                        <td>
-                                            @if($category->status == 1)
-                                                <span class="btn btn-success btn-sm">Active</span>
-                                            @elseif($category->status == 0)
-                                                <span class="btn btn-danger btn-sm">In Active</span>
-                                            @endif
-                                        </td>
+                                        <td>{{$category->Status}}</td>
                                         <td>
                                             <a href="{{route('categories.edit',$category->id)}}"
-                                               class="btn btn-primary btn-sm"><i class="far fa-edit"></i></a>
-                                            <form action="{{route('categories.destroy',$category->id)}}" method="POST"
-                                                  class="d-inline">
+                                               class="btn btn-primary btn-sm">Edit</a>
+                                            <form action="{{route('categories.destroy',$category->id)}}" method="POST" class="d-inline">
                                                 @method('DELETE')
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -111,8 +103,8 @@
     </div>
 @endsection
 @section('script')
-    <script src="{{ URL::asset('/assets/libs/parsleyjs/parsleyjs.min.js') }}"></script>
+    <script src="{{ asset('/assets/libs/parsleyjs/parsleyjs.min.js') }}"></script>
 
-    <script src="{{ URL::asset('/assets/js/pages/form-validation.init.js') }}"></script>
+    <script src="{{ asset('/assets/js/pages/form-validation.init.js') }}"></script>
 
 @endsection

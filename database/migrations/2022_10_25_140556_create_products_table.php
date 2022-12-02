@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('unit_name');
             $table->decimal('price',9,2);
             $table->text('description')->nullable();
+            $table->boolean('status')->default(true);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();

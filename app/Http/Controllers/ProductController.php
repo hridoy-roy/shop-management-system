@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\ProductCategory;
 
 class ProductController extends Controller
 {
@@ -15,7 +16,13 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $data = [
+            'title' => 'Product',
+            'subTitle' => 'Product Info',
+            'products' => Product::all(),
+            'categories' => ProductCategory::all(),
+        ];
+        return view('products.create', $data);
     }
 
     /**
@@ -31,18 +38,20 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreProductRequest  $request
+     * @param \App\Http\Requests\StoreProductRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreProductRequest $request)
     {
-        //
+        Product::create(array_merge($request->validated(), ['created_by' => \Auth::user()->name]));
+        toastr()->success('Data has been saved successfully!');
+        return redirect()->back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Product  $product
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function show(Product $product)
@@ -53,19 +62,26 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param \App\Models\Product $product
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function edit(Product $product)
     {
-        //
+        $data = [
+            'title' => 'Product',
+            'subTitle' => 'Product Info',
+            'products' => Product::all(),
+            'categories' => ProductCategory::all(),
+            'product' => $product,
+        ];
+        return view('products.edit', $data);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateProductRequest  $request
-     * @param  \App\Models\Product  $product
+     * @param \App\Http\Requests\UpdateProductRequest $request
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateProductRequest $request, Product $product)
@@ -76,7 +92,7 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Product  $product
+     * @param \App\Models\Product $product
      * @return \Illuminate\Http\Response
      */
     public function destroy(Product $product)

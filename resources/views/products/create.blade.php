@@ -17,30 +17,36 @@
 
 
     <div class="row">
-        <div class="col-xl-6">
+        <div class="col-xl-4">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title mb-4">Category Create</h4>
+                    <h4 class="card-title mb-4">{{$title}} Create</h4>
 
-                    <form class="custom-validation" action="{{route('categories.store')}}" method="POST">
+                    <form class="custom-validation" action="{{route('products.store')}}" method="POST">
                         @csrf
-                        {{--                        @dd($utility::$status)--}}
                         <x-forms.input label="Name" type="text" name="name"
-                                       placeholder="Enter Your First Name"></x-forms.input>
+                                       placeholder="Enter Name"></x-forms.input>
+
+                        <x-forms.select label="Categories Name" name="product_category_id"
+                                        :options="$categories"></x-forms.select>
+
+                        <x-forms.select label="Unit Name" name="unit_name"
+                                        :options="$utility::$units"></x-forms.select>
+
+                        <x-forms.input label="Price" type="number" name="price"
+                                       placeholder="Enter Product Price"></x-forms.input>
                         <div class="row">
                             <div class="col-md-12">
-                                <x-forms.textarea label="Description" type="text" name="description"
+                                <x-forms.textarea label="Description" type="text" name="description" :required=false
                                                   placeholder="Enter Your Category Description"></x-forms.textarea>
                             </div>
                             <div class="col-md-4">
                                 <x-forms.select label="Status" name="status"
                                                 :options="$utility::$status"></x-forms.select>
-
                             </div>
-
                         </div>
-                        <div>
-                            <button type="submit" class="btn btn-primary w-md">Submit</button>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary w-md">Save</button>
                         </div>
                     </form>
                 </div>
@@ -50,11 +56,11 @@
         </div>
         <!-- end col -->
 
-        <div class="col-xl-6">
+        <div class="col-xl-8">
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
-                        <h4 class="card-title">Categories List</h4>
+                        <h4 class="card-title">{{$title}} List</h4>
 
                         <div class="table-responsive">
                             <table class="table align-middle mb-0 text-center">
@@ -63,38 +69,45 @@
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Unit</th>
+                                    <th>Price</th>
                                     <th>Description</th>
                                     <th>Status</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @forelse($categories as $category)
+                                @forelse($products as $product)
                                     <tr>
                                         <th scope="row">{{++$loop->index}}</th>
-                                        <td>{{$category->name}}</td>
-                                        <td>{{$category->description}}</td>
+                                        <td>{{$product->name}}</td>
+                                        <td>{{$product->category->name}}</td>
+                                        <td>{{$product->unit_name}}</td>
+                                        <td>{{$product->price}}</td>
+                                        <td>{{$product->description}}</td>
                                         <td>
-                                            @if($category->status == 1)
+                                            @if($product->status == 1)
                                                 <span class="btn btn-success btn-sm">Active</span>
-                                            @elseif($category->status == 0)
+                                            @elseif($product->status == 0)
                                                 <span class="btn btn-danger btn-sm">In Active</span>
                                             @endif
                                         </td>
                                         <td>
-                                            <a href="{{route('categories.edit',$category->id)}}"
+                                            <a href="{{route('products.edit',$product->id)}}"
                                                class="btn btn-primary btn-sm"><i class="far fa-edit"></i></a>
-                                            <form action="{{route('categories.destroy',$category->id)}}" method="POST"
+                                            <form action="{{route('products.destroy',$product->id)}}" method="POST"
                                                   class="d-inline">
                                                 @method('DELETE')
                                                 @csrf
-                                                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                                                <button type="submit" class="btn btn-danger btn-sm"><i
+                                                        class="fas fa-trash-alt"></i></button>
                                             </form>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="3" class="text-center text-danger">No Data</td>
+                                        <td colspan="7" class="text-center text-danger"><strong>No Data</strong></td>
                                     </tr>
                                 @endforelse
                                 </tbody>

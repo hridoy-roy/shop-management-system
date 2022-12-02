@@ -36,10 +36,6 @@
     </div>
     <!-- END layout-wrapper -->
 
-    <!-- Right Sidebar -->
-    @include('layouts.right-sidebar')
-    <!-- /Right-bar -->
-
     <!-- JAVASCRIPT -->
     @include('layouts.vendor-scripts')
 </body>

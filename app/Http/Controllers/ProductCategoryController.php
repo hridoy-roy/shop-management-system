@@ -22,7 +22,7 @@ class ProductCategoryController extends Controller
             'title' => 'Categories Info',
             'categories' => ProductCategory::all(),
         ];
-        return view('categories.create')->with($data);
+        return view('categories.create', $data);
     }
 
     /**
@@ -43,7 +43,7 @@ class ProductCategoryController extends Controller
      */
     public function store(StoreProductCategoryRequest $request)
     {
-        ProductCategory::create(array_merge($request->validated(),['created_by'=>\Auth::user()->name]));
+        ProductCategory::create(array_merge($request->validated(), ['created_by' => \Auth::user()->name]));
         toastr()->success('Data has been saved successfully!');
         return redirect()->back();
     }
@@ -62,12 +62,18 @@ class ProductCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\ProductCategory $productCategory
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|View|\Illuminate\Http\Response
      */
-    public function edit(ProductCategory $productCategory)
+    public function edit(ProductCategory $category)
     {
-        //
+        $data = [
+            'subTitle' => 'Product Category Edit',
+            'title' => 'Categories Info Edit',
+            'categories' => ProductCategory::all(),
+            'category' => $category,
+        ];
+        return view('categories.edit', $data);
+
     }
 
     /**
@@ -77,9 +83,16 @@ class ProductCategoryController extends Controller
      * @param \App\Models\ProductCategory $productCategory
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateProductCategoryRequest $request, ProductCategory $productCategory)
+    public function update(StoreProductCategoryRequest $request, ProductCategory $category)
     {
-        //
+        $category->update(array_merge(
+            $request->validated(),
+            ['updated_by' => \Auth::user()->name]
+        ));
+
+        toastr()->success('Data has been Updated successfully!');
+
+        return redirect()->route('categories.index');
     }
 
     /**
@@ -88,8 +101,14 @@ class ProductCategoryController extends Controller
      * @param \App\Models\ProductCategory $productCategory
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductCategory $productCategory)
+    public function destroy(ProductCategory $category,)
     {
-        //
+        $destroy = $category->delete();
+        if ($destroy) {
+            toastr()->success('Data has been Deleted successfully!');
+        } else {
+            toastr()->error('Data Not Delete!');
+        }
+        return redirect()->route('categories.index');
     }
 }
