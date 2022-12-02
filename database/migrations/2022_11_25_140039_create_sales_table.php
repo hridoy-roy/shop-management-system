@@ -15,11 +15,17 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-//            $table->integer('sale_num')->unique();
-//            $table->date('date')->default(now());
-//            $table->foreignIdFor(\App\Models\Product::class)->constrained()->cascadeOnUpdate()->nullOnDelete();
-//            $table->string('created_by')->nullable();
-//            $table->string('updated_by')->nullable();
+            $table->integer('sale_num')->unique();
+            $table->date('date')->default(now());
+            $table->foreignIdFor(\App\Models\Product::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->decimal('rate',9,2);
+            $table->integer('qty');
+            $table->decimal('amount',9,2);
+            $table->string('unit_name');
+            $table->string('cost_rate');
+            $table->enum('type',['CHECKED','MANUAL','COMPLETED'])->default('MANUAL');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }

@@ -23,6 +23,7 @@
                     <h4 class="card-title mb-4">{{$title}} Edit</h4>
 
                     <form class="custom-validation" action="{{route('products.update',$product->id)}}" method="POST">
+                        @method('PUT')
                         @csrf
                         <x-forms.input label="Name" type="text" name="name"
                                        placeholder="Enter Name" :value="$product->name"></x-forms.input>

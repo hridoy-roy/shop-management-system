@@ -82,11 +82,18 @@ class ProductController extends Controller
      *
      * @param \App\Http\Requests\UpdateProductRequest $request
      * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateProductRequest $request, Product $product)
+    public function update(StoreProductRequest $request, Product $product)
     {
-        //
+        $product->update(array_merge(
+            $request->validated(),
+            ['updated_by' => \Auth::user()->name]
+        ));
+
+        toastr()->success('Data has been Updated successfully!');
+
+        return redirect()->route('products.index');
     }
 
     /**
@@ -97,6 +104,12 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $destroy = $product->delete();
+        if ($destroy) {
+            toastr()->success('Data has been Deleted successfully!');
+        } else {
+            toastr()->error('Data Not Delete!');
+        }
+        return redirect()->route('products.index');
     }
 }

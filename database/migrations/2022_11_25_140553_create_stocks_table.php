@@ -15,6 +15,18 @@ return new class extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
+            $table->date('date')->default(now());
+            $table->foreignIdFor(\App\Models\Product::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->integer('in');
+            $table->decimal('price',9,2);
+            $table->decimal('total',9,2);
+            $table->decimal('cost',9,2);
+            $table->decimal('final',9,2);
+//            $table->integer('tr_no');
+//            $table->enum('tr_no',[]);
+//            $table->integer('lot_no');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }
