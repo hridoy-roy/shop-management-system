@@ -16,6 +16,21 @@
 
 
     <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                        <!-- Extra Large modal button -->
+                        <button type="button" class="btn btn-primary waves-effect waves-light" data-bs-toggle="modal" data-bs-target=".bs-example-modal-xl">Extra large modal</button>
+                </div>
+                <!-- end card body -->
+            </div>
+            <!-- end card -->
+        </div>
+        <!-- end col -->
+    </div>
+    <!-- end row -->
+
+    <div class="row">
         <div class="col-xl-6">
             <div class="card">
                 <div class="card-body">
@@ -49,7 +64,7 @@
         </div>
         <!-- end col -->
 
-        <div class="col-xl-6">
+        <div class="col-xl-12">
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">
@@ -68,7 +83,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @forelse($categories as $category)
+                                @forelse($sales as $category)
                                     <tr>
                                         <th scope="row">{{++$loop->index}}</th>
                                         <td>{{$category->name}}</td>

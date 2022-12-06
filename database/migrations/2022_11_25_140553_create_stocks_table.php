@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->date('date')->default(now());
             $table->foreignIdFor(\App\Models\Product::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->integer('in');
+            $table->integer('product_in')->default(0);
+            $table->integer('product_in')->default(0);
             $table->decimal('price',9,2);
             $table->decimal('total',9,2);
             $table->decimal('cost',9,2);

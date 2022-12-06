@@ -76,9 +76,9 @@
                                         <td>{{$category->description}}</td>
                                         <td>
                                             @if($category->status == 1)
-                                                <span class="btn btn-success btn-sm">Active</span>
+                                                <span class="badge bg-success font-size-10">Active</span>
                                             @elseif($category->status == 0)
-                                                <span class="btn btn-danger btn-sm">In Active</span>
+                                                <span class="badge bg-danger font-size-10">In Active</span>
                                             @endif
                                         </td>
                                         <td>

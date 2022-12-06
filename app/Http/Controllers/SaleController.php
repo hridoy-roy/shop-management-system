@@ -11,11 +11,16 @@ class SaleController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
-        //
+        $data = [
+            'title' => 'Product',
+            'subTitle' => 'Product Info',
+            'sales' => Sale::get(),
+        ];
+        return view('sale.index', $data);
     }
 
     /**
