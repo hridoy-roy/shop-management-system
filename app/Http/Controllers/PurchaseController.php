@@ -2,20 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
+use App\Models\ProductCategory;
 use App\Models\Purchase;
 use App\Http\Requests\StorePurchaseRequest;
 use App\Http\Requests\UpdatePurchaseRequest;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 
 class PurchaseController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
-    public function index()
+    public function index(): View|Factory|Application
     {
-        //
+        $purchaseId = Purchase::latest()->select('purchase_num')->first() ?? null;
+        $purchaseId ? $purchaseId += 1 : $purchaseId = "000001";
+
+        $data = [
+            'subTitle' => 'Purchase',
+            'title' => 'Purchase',
+            'purchaseId' => $purchaseId,
+        ];
+        return view('purchases.index', $data);
     }
 
     /**
@@ -31,7 +44,7 @@ class PurchaseController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StorePurchaseRequest  $request
+     * @param \App\Http\Requests\StorePurchaseRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StorePurchaseRequest $request)
@@ -42,7 +55,7 @@ class PurchaseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Purchase  $purchase
+     * @param \App\Models\Purchase $purchase
      * @return \Illuminate\Http\Response
      */
     public function show(Purchase $purchase)
@@ -53,7 +66,7 @@ class PurchaseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Purchase  $purchase
+     * @param \App\Models\Purchase $purchase
      * @return \Illuminate\Http\Response
      */
     public function edit(Purchase $purchase)
@@ -64,8 +77,8 @@ class PurchaseController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdatePurchaseRequest  $request
-     * @param  \App\Models\Purchase  $purchase
+     * @param \App\Http\Requests\UpdatePurchaseRequest $request
+     * @param \App\Models\Purchase $purchase
      * @return \Illuminate\Http\Response
      */
     public function update(UpdatePurchaseRequest $request, Purchase $purchase)
@@ -76,7 +89,7 @@ class PurchaseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Purchase  $purchase
+     * @param \App\Models\Purchase $purchase
      * @return \Illuminate\Http\Response
      */
     public function destroy(Purchase $purchase)

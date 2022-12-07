@@ -1,6 +1,7 @@
 <div class="mb-3">
     <label for="{{$name}}" class="form-label">{{$label}}</label>
     <select id="{{$name.'34'}}"
+            wire:model="{{$name}}"
             name="{{$name}}"
             {{ $required ? 'required' : ''}}
             class="form-select  @error($name) is-invalid @enderror">

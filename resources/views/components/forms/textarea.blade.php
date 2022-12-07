@@ -3,6 +3,7 @@
     <div>
         <textarea
             type="{{$type}}"
+            wire:model="{{$name}}"
             name="{{$name}}"
             id="{{$name}}"
             placeholder="{{$placeholder}}"
