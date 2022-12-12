@@ -13,32 +13,8 @@
             {{$title}}
         @endslot
     @endcomponent
+    <livewire:purchase></livewire:purchase>
 
-    <div class="row">
-        <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Purchase Number <span class="text-warning">#{{$purchaseId}}</span></h4>
-                    <h4 ></h4>
-
-                </div>
-                <!-- end card body -->
-            </div>
-            <!-- end card -->
-        </div>
-        <!-- end col -->
-
-
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title mb-4">{{$title}} Create</h4>
-                        <livewire:purchase></livewire:purchase>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         {{--    <div class="col-xl-12">--}}
         {{--        <div class="card">--}}

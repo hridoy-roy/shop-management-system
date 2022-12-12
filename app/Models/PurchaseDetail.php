@@ -4,16 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Purchase extends Model
+class PurchaseDetail extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-    public function purchaseDetails(): HasMany
+    public function purchase(): HasOne
     {
-        return $this->hasMany(PurchaseDetail::class);
+        return $this->hasOne(Purchase::class,'id','purchase_id');
     }
 }

@@ -7,12 +7,15 @@ use App\Models\ProductCategory;
 use App\Models\Purchase;
 use App\Http\Requests\StorePurchaseRequest;
 use App\Http\Requests\UpdatePurchaseRequest;
+use App\Treat\PurchaseId;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 
 class PurchaseController extends Controller
 {
+
+    use PurchaseId;
     /**
      * Display a listing of the resource.
      *
@@ -20,13 +23,10 @@ class PurchaseController extends Controller
      */
     public function index(): View|Factory|Application
     {
-        $purchaseId = Purchase::latest()->select('purchase_num')->first() ?? null;
-        $purchaseId ? $purchaseId += 1 : $purchaseId = "000001";
-
         $data = [
             'subTitle' => 'Purchase',
             'title' => 'Purchase',
-            'purchaseId' => $purchaseId,
+            'purchaseId' => $this->purchaseId(),
         ];
         return view('purchases.index', $data);
     }

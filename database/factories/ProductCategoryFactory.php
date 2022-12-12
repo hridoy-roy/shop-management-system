@@ -14,10 +14,13 @@ class ProductCategoryFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'name' => fake()->name(),
+            'description' => fake()->text(),
+            'created_by' => "Admin",
+            'updated_by' => "Admin",
         ];
     }
 }

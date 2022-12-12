@@ -15,12 +15,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-         \App\Models\User::factory()->create([
-             'name' => 'Admin',
-             'password' => Hash::make(123456),
-             'email' => 'admin@themesbrand.com',
-         ]);
+        $this->call([
+            UserSeeder::class,
+            ProductCategorySeeder::class,
+            ProductSeeder::class,
+        ]);
     }
 }
