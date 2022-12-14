@@ -6,15 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class PurchaseDetail extends Model
+class SaleDetail extends Model
 {
     use HasFactory;
 
     protected $guarded = [];
 
-    public function purchase(): HasOne
+    public function sale(): HasOne
     {
-        return $this->hasOne(Purchase::class,'id','purchase_id');
+        return $this->hasOne(Sale::class,'id','sale_id');
     }
     public function product(): HasOne
     {

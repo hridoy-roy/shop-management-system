@@ -25,8 +25,8 @@ class PurchaseDetailObserver
         $stock->tr_no = $purchaseDetail->purchase->id;
         $stock->tr_from = "Purchase";
         $stock->lot_no = $purchaseDetail->purchase->id;
-        $stock->stocksable_id = $purchaseDetail->purchase->id;
-        $stock->stocksable_type = purchase::class;
+        $stock->stocksable_id = $purchaseDetail->id;
+        $stock->stocksable_type = PurchaseDetail::class;
         $stock->created_by = Auth()->user()->name;
         $stock->saveQuietly();
     }

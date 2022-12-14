@@ -7,6 +7,7 @@ use App\Models\ProductCategory;
 use App\Models\Purchase;
 use App\Http\Requests\StorePurchaseRequest;
 use App\Http\Requests\UpdatePurchaseRequest;
+use App\Models\PurchaseDetail;
 use App\Treat\PurchaseId;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -24,11 +25,11 @@ class PurchaseController extends Controller
     public function index(): View|Factory|Application
     {
         $data = [
-            'subTitle' => 'Purchase',
+            'subTitle' => 'Purchase list',
             'title' => 'Purchase',
-            'purchaseId' => $this->purchaseId(),
+            'purchases' => PurchaseDetail::get(),
         ];
-        return view('purchases.index', $data);
+        return view('purchases.list', $data);
     }
 
     /**
@@ -38,7 +39,12 @@ class PurchaseController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'subTitle' => 'Purchase',
+            'title' => 'Purchase',
+            'purchaseId' => $this->purchaseId(),
+        ];
+        return view('purchases.index', $data);
     }
 
     /**

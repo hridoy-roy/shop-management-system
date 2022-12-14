@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Sale;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
+use App\Models\SaleDetail;
 
 class SaleController extends Controller
 {
@@ -16,11 +17,11 @@ class SaleController extends Controller
     public function index()
     {
         $data = [
-            'title' => 'Product',
-            'subTitle' => 'Product Info',
-            'sales' => Sale::get(),
+            'subTitle' => 'Sale list',
+            'title' => 'Sale',
+            'sales' => SaleDetail::get(),
         ];
-        return view('sale.index', $data);
+        return view('sale.list', $data);
     }
 
     /**
@@ -30,7 +31,11 @@ class SaleController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'title' => 'Sale',
+            'subTitle' => 'Sale Info',
+        ];
+        return view('sale.create', $data);
     }
 
     /**

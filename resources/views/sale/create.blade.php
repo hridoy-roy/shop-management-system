@@ -13,7 +13,7 @@
             {{$title}}
         @endslot
     @endcomponent
-    <livewire:purchase></livewire:purchase>
+    <livewire:sale></livewire:sale>
 @endsection
 @section('script')
     <script src="{{ asset('/assets/libs/parsleyjs/parsleyjs.min.js') }}"></script>

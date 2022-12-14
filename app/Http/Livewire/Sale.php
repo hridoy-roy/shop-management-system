@@ -3,14 +3,14 @@
 namespace App\Http\Livewire;
 
 use App\Models\Product;
-use App\Treat\PurchaseId;
 use App\Treat\Repeater;
+use App\Treat\SaleId;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
-class Purchase extends Component
+class Sale extends Component
 {
-    use Repeater, PurchaseId;
+    use Repeater, SaleId;
 
     public $product_id;
     public $price;
@@ -53,32 +53,30 @@ class Purchase extends Component
         }
     }
 
-
     public function submit()
     {
         try {
             DB::beginTransaction();
-            $purchase = \App\Models\Purchase::create([
-                'purchase_num' => $this->purchaseId(),
+            $sale = \App\Models\Sale::create([
+                'sale_num' => $this->SaleId(),
                 'created_by' => \Auth::user()->name,
             ]);
-            $purchase->purchaseDetails()->createMany($this->purchseDetails($this->validate()));
+            $sale->saleDetails()->createMany($this->saleDetails($this->validate()));
             DB::commit();
             $this->reset();
         } catch (Throwable $e) {
             DB::rollBack();
-            $this->reset();
             report($e);
             toastr()->error('Data Not saved successfully!');
+            $this->reset();
             return redirect()->back();
         }
-
         toastr()->success('Data has been saved successfully!');
         return redirect()->back();
     }
 
 
-    public function purchseDetails(array $data): array
+    public function saleDetails(array $data): array
     {
         $data['product_id'] = data_get($data, 'product_id.*');
         $data['price'] = data_get($data, 'price.*');
@@ -95,15 +93,14 @@ class Purchase extends Component
 
         return $purchaseDetails ?? [];
     }
-
     public function render()
     {
         $data = [
-            'subTitle' => 'Purchase',
+            'subTitle' => 'Sale Info',
             'title' => 'Purchase',
             'products' => Product::where('status', 1)->get(),
-            'purchaseId' => $this->purchaseId(),
+            'saleId' => $this->saleId(),
         ];
-        return view('livewire.purchase', $data);
+        return view('livewire.sale', $data);
     }
 }
