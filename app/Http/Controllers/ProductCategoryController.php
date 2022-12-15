@@ -20,7 +20,7 @@ class ProductCategoryController extends Controller
         $data = [
             'subTitle' => 'Product Category',
             'title' => 'Categories Info',
-            'categories' => ProductCategory::all(),
+            'categories' => ProductCategory::latest()->take(200)->get(),
         ];
         return view('categories.create', $data);
     }
@@ -69,7 +69,7 @@ class ProductCategoryController extends Controller
         $data = [
             'subTitle' => 'Product Category Edit',
             'title' => 'Categories Info Edit',
-            'categories' => ProductCategory::all(),
+            'categories' => ProductCategory::latest()->take(200)->get(),
             'category' => $category,
         ];
         return view('categories.edit', $data);

@@ -17,7 +17,7 @@ class SaleDetailObserver
     {
         $stock = new Stock();
         $stock->product_id = $saleDetail->product_id;
-        $stock->product_in = $saleDetail->qty;
+        $stock->product_out = $saleDetail->qty;
         $stock->price = $saleDetail->rate;
         $stock->amount = $saleDetail->amount;
         $stock->tr_no = $saleDetail->sale->id;

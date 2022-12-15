@@ -19,7 +19,7 @@ class SaleController extends Controller
         $data = [
             'subTitle' => 'Sale list',
             'title' => 'Sale',
-            'sales' => SaleDetail::get(),
+            'sales' => SaleDetail::latest()->take(2000)->get(),
         ];
         return view('sale.list', $data);
     }

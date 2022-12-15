@@ -27,7 +27,7 @@ class PurchaseController extends Controller
         $data = [
             'subTitle' => 'Purchase list',
             'title' => 'Purchase',
-            'purchases' => PurchaseDetail::get(),
+            'purchases' => PurchaseDetail::latest()->take(2000)->get(),
         ];
         return view('purchases.list', $data);
     }

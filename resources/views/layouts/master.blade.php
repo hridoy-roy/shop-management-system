@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="utf-8"/>
-    <title> @yield('title') | Skote - Admin & Dashboard Template</title>
+    <title> @yield('title') | Shop Management system (POS)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description"/>
-    <meta content="Themesbrand" name="author"/>
+    <meta content="Shop Management system (POS)" name="description"/>
+    <meta content="Hridoy Roy | 01857446931 | hridoyroy.cse@gmail.com" name="author"/>
     <!-- App favicon -->
     <link rel="shortcut icon" href="{{ URL::asset('assets/images/favicon.ico') }}">
     @include('layouts.head-css')
@@ -39,6 +39,7 @@
 
     <!-- JAVASCRIPT -->
     @include('layouts.vendor-scripts')
+
     <livewire:scripts />
     </body>
 

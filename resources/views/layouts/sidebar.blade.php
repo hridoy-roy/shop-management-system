@@ -27,8 +27,8 @@
                         <span key="t-multi-level">Item Manage</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="" key="t-level-1-1">Product Category</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Product Info</a></li>
+                        <li><a href="{{route('categories.index')}}" key="t-level-1-1">Product Category</a></li>
+                        <li><a href="{{route('products.index')}}" key="t-level-1-1">Product Info</a></li>
                     </ul>
                 </li>
 
@@ -38,9 +38,9 @@
                         <span key="t-multi-level">Purchase</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Purchase Order</a></li>
+                        <li><a href="{{route('purchases.create')}}" key="t-level-1-1">Purchase Order</a></li>
                         <li><a href="javascript: void(0);" key="t-level-1-1">Purchase Hold</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Purchase Report</a></li>
+                        <li><a href="{{route('purchases.index')}}" key="t-level-1-1">Purchase Report</a></li>
                     </ul>
                 </li>
 
@@ -70,9 +70,9 @@
                         <span key="t-multi-level">Sale </span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Sales order</a></li>
+                        <li><a href="{{route('sales.create')}}" key="t-level-1-1">Sales order</a></li>
                         <li><a href="javascript: void(0);" key="t-level-1-1">Sales Hold</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Sales Reports</a></li>
+                        <li><a href="{{route('sales.index')}}" key="t-level-1-1">Sales Reports</a></li>
                     </ul>
                 </li>
                 <li>

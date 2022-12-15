@@ -1,17 +1,13 @@
 @extends('layouts.master')
-@section('title')
-    {{$title}}
+@section('title') {{$title}} @endsection
+@section('css')
+    <!-- DataTables -->
+    <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
-
 @section('content')
-
     @component('components.breadcrumb')
-        @slot('li_1')
-            {{$subTitle}}
-        @endslot
-        @slot('title')
-            {{$title}}
-        @endslot
+        @slot('li_1')  {{$subTitle}} @endslot
+        @slot('title') {{$title}} @endslot
     @endcomponent
 
     <div class="row">
@@ -24,7 +20,7 @@
                     </p>
 
                     <div class="table-responsive">
-                        <table class="table mb-0">
+                        <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                             <thead>
                             <tr>
                                 <th>#</th>
@@ -43,7 +39,7 @@
                             @forelse($sales as $sale)
                                 <tr>
                                     <th scope="row">{{++$loop->index}}</th>
-                                    <td>{{$sale->sale->purchase_num}}</td>
+                                    <td>{{$sale->sale->sale_num}}</td>
                                     <td>{{$sale->sale->date}}</td>
                                     <td>{{$sale->product->name}}</td>
                                     <td>{{$sale->rate}}</td>
@@ -67,7 +63,13 @@
         </div>
     </div>
     <!-- end row -->
-
-    {{--@dd($purchases);--}}
+@endsection
+@section('script')
+    <!-- Required datatable js -->
+    <script src="{{ asset('assets/libs/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
+    <!-- Datatable init js -->
+    <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
 @endsection
 

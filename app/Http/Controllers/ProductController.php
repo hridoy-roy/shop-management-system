@@ -19,8 +19,8 @@ class ProductController extends Controller
         $data = [
             'title' => 'Product',
             'subTitle' => 'Product Info',
-            'products' => Product::all(),
-            'categories' => ProductCategory::all(),
+            'products' => Product::latest()->take(200)->get(),
+            'categories' => ProductCategory::latest()->take(200)->get(),
         ];
         return view('products.create', $data);
     }
@@ -70,8 +70,8 @@ class ProductController extends Controller
         $data = [
             'title' => 'Product',
             'subTitle' => 'Product Info',
-            'products' => Product::all(),
-            'categories' => ProductCategory::all(),
+            'products' => Product::latest()->take(200)->get(),
+            'categories' => ProductCategory::latest()->take(200)->get(),
             'product' => $product,
         ];
         return view('products.edit', $data);

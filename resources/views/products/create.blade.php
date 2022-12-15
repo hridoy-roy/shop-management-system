@@ -1,21 +1,14 @@
 @extends('layouts.master')
-
-@section('title')
-    {{$title}}
+@section('title') {{$title}} @endsection
+@section('css')
+    <!-- DataTables -->
+    <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
-
 @section('content')
-
     @component('components.breadcrumb')
-        @slot('li_1')
-            {{$subTitle}}
-        @endslot
-        @slot('title')
-            {{$title}}
-        @endslot
+        @slot('li_1')  {{$subTitle}} @endslot
+        @slot('title') {{$title}} @endslot
     @endcomponent
-
-
     <div class="row">
         <div class="col-xl-4">
             <div class="card">
@@ -63,9 +56,8 @@
                         <h4 class="card-title">{{$title}} List</h4>
 
                         <div class="table-responsive">
-                            <table class="table align-middle mb-0 text-center">
-
-                                <thead>
+                            <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
+                            <thead>
                                 <tr>
                                     <th>#</th>
                                     <th>Name</th>
@@ -124,8 +116,10 @@
     </div>
 @endsection
 @section('script')
-    <script src="{{ URL::asset('/assets/libs/parsleyjs/parsleyjs.min.js') }}"></script>
-
-    <script src="{{ URL::asset('/assets/js/pages/form-validation.init.js') }}"></script>
-
+    <!-- Required datatable js -->
+    <script src="{{ asset('assets/libs/datatables/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
+    <!-- Datatable init js -->
+    <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
 @endsection
