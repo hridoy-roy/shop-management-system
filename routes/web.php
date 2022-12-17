@@ -1,10 +1,14 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SaleReturnController;
+use App\Http\Controllers\StockController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,7 +39,11 @@ Route::middleware('auth')->group(callback: function () {
         'categories' => ProductCategoryController::class,
         'products' => ProductController::class,
         'purchases' => PurchaseController::class,
+        'purchaseReturns' => PurchaseReturnController::class,
         'sales' => SaleController::class,
+        'saleReturns' => SaleReturnController::class,
+        'stock' => StockController::class,
+        'accounts' => AccountController::class,
     ]);
 });
 

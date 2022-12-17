@@ -42,7 +42,6 @@ class PurchaseController extends Controller
         $data = [
             'subTitle' => 'Purchase',
             'title' => 'Purchase',
-            'purchaseId' => $this->purchaseId(),
         ];
         return view('purchases.index', $data);
     }

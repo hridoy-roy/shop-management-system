@@ -5,27 +5,37 @@ namespace App\Http\Controllers;
 use App\Models\PurchaseReturn;
 use App\Http\Requests\StorePurchaseReturnRequest;
 use App\Http\Requests\UpdatePurchaseReturnRequest;
+use App\Models\PurchaseReturnDetail;
 
 class PurchaseReturnController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function index()
     {
-        //
+        $data = [
+            'subTitle' => 'Purchase Return list',
+            'title' => 'Purchase Return',
+            'purchaseReturns' => PurchaseReturnDetail::latest()->take(2000)->get(),
+        ];
+        return view('purchase-return.list', $data);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function create()
     {
-        //
+        $data = [
+            'subTitle' => 'Purchase Return Create',
+            'title' => 'Purchase Return',
+        ];
+        return view('purchase-return.index', $data);
     }
 
     /**

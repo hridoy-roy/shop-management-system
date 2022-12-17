@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SaleReturn;
 use App\Http\Requests\StoreSaleReturnRequest;
 use App\Http\Requests\UpdateSaleReturnRequest;
+use App\Models\SaleReturnDetail;
 
 class SaleReturnController extends Controller
 {
@@ -15,7 +16,12 @@ class SaleReturnController extends Controller
      */
     public function index()
     {
-        //
+        $data = [
+            'subTitle' => 'Sale Return list',
+            'title' => 'Sale Return',
+            'saleReturns' => SaleReturnDetail::latest()->take(2000)->get(),
+        ];
+        return view('sale-return.list', $data);
     }
 
     /**
@@ -25,7 +31,11 @@ class SaleReturnController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'title' => 'Sale Return',
+            'subTitle' => 'Sale Return Info',
+        ];
+        return view('sale-return.create', $data);
     }
 
     /**
