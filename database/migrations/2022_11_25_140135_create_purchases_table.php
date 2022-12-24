@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('purchase_num')->unique();
             $table->date('date')->default(now());
-            $table->enum('type',['CHECKED'])->default('CHECKED');
+            $table->decimal('amount',9,2);
+            $table->enum('type',App\Utility\Utility::$type)->default('Checked');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();

@@ -2,11 +2,13 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Customer;
 use App\Models\Product;
 use App\Treat\Repeater;
 use App\Treat\SaleId;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use phpDocumentor\Reflection\Types\Integer;
 
 class Sale extends Component
 {
@@ -21,6 +23,9 @@ class Sale extends Component
     public array $total = [0];
     public $finalTotal;
     public $totalQty;
+    public $customer_id;
+    public $discount;
+    public $type;
     public $productAvailable;
 
     protected $rules = [
@@ -43,13 +48,19 @@ class Sale extends Component
         if (str_starts_with($name, 'price.')) {
             $nameKey = explode(".", $name);
             $this->singlePrice = $value;
-            $this->finalTotal = array_sum($this->total);
+            $this->finalTotal = array_sum($this->total) ;
         }
         if (str_starts_with($name, 'quantity.')) {
             $nameKey = explode(".", $name);
             $this->total[$nameKey[1]] = $this->singlePrice * $value;
-            $this->finalTotal = array_sum($this->total);
+            $this->finalTotal = array_sum($this->total) - $this->discount;
             $this->totalQty = array_sum($this->quantity);
+        }
+        if ($name =='discount') {
+            $this->finalTotal = (!is_null(array_sum($this->total)) ?? 0) - (is_numeric($this->discount) ? $this->discount : 0);
+            if (isset($this->quantity)){
+            $this->totalQty = array_sum($this->quantity) ?? 0;
+            }
         }
     }
 
@@ -59,6 +70,10 @@ class Sale extends Component
             DB::beginTransaction();
             $sale = \App\Models\Sale::create([
                 'sale_num' => $this->SaleId(),
+                'customer_id' => $this->customer_id,
+                'amount' => $this->finalTotal,
+                'discount' => $this->discount,
+                'type' => $this->type,
                 'created_by' => \Auth::user()->name,
             ]);
             $sale->saleDetails()->createMany($this->saleDetails($this->validate()));
@@ -99,6 +114,7 @@ class Sale extends Component
             'subTitle' => 'Sale Info',
             'title' => 'Purchase',
             'products' => Product::where('status', 1)->get(),
+            'customers' => Customer::where('status', 1)->get(),
             'saleId' => $this->saleId(),
         ];
         return view('livewire.sale', $data);

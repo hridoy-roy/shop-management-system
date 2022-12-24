@@ -17,7 +17,11 @@ class SaleFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'sale_num' => fake()->numberBetween(),
+            'date' => fake()->date('Y-m-d'),
+            'amount' => fake()->numberBetween(100,300),
+            'type' => 'Checked',
+            'created_by' => 'Admin Seeder'
         ];
     }
 }

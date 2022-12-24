@@ -2,19 +2,19 @@
 
 namespace Database\Seeders;
 
-use App\Models\Purchase;
+use App\Models\Customer;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PurchaseSeeder extends Seeder
+class CustomerSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run(): void
+    public function run()
     {
-        Purchase::factory(20)->create();
+        Customer::factory(20)->create();
     }
 }

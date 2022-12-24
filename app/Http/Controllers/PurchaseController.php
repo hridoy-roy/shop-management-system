@@ -17,6 +17,7 @@ class PurchaseController extends Controller
 {
 
     use PurchaseId;
+
     /**
      * Display a listing of the resource.
      *
@@ -28,6 +29,7 @@ class PurchaseController extends Controller
             'subTitle' => 'Purchase list',
             'title' => 'Purchase',
             'purchases' => PurchaseDetail::latest()->take(2000)->get(),
+            'products' => Product::where('status','1')->get(),
         ];
         return view('purchases.list', $data);
     }
@@ -35,9 +37,9 @@ class PurchaseController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
-    public function create()
+    public function create(): Application|Factory|View
     {
         $data = [
             'subTitle' => 'Purchase',
@@ -54,7 +56,16 @@ class PurchaseController extends Controller
      */
     public function store(StorePurchaseRequest $request)
     {
-        //
+        $purchase = Purchase::whereDate('date','>=',$request->from_date)->whereDate('date','<=',$request->to_date)->get();
+        dd($purchase);
+
+        $data = [
+            'subTitle' => 'Purchase list',
+            'title' => 'Purchase',
+//            'purchases' => ,
+            'products' => Product::where('status','1')->get(),
+        ];
+        return view('purchases.list', $data);
     }
 
     /**

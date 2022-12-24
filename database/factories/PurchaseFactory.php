@@ -14,10 +14,14 @@ class PurchaseFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            //
+            'purchase_num' => fake()->numberBetween(),
+            'date' => fake()->date('Y-m-d'),
+            'amount' => fake()->numberBetween(100,300),
+            'type' => 'Checked',
+            'created_by' => 'Admin Seeder'
         ];
     }
 }

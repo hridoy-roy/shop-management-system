@@ -9,6 +9,8 @@ class Utility
     const PES = "pes";
     const KG = "kg";
     const LITER = "liter";
+    const CHECKED = 'Checked';
+    const HOLD = 'Hold';
 
 
     public static array $status = [
@@ -18,8 +20,12 @@ class Utility
 
     public static array $units = [
         self::PES => self::PES,
-        self::PES => self::PES,
         self::KG => self::KG,
         self::LITER => self::LITER,
+    ];
+
+    public static array $type = [
+        self::CHECKED => self::CHECKED,
+        self::HOLD => self::HOLD,
     ];
 }

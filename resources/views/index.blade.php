@@ -1,18 +1,12 @@
 @extends('layouts.master')
-
-@section('title')
-    @lang('translation.Starter_Page')
+@section('title') {{$title}} @endsection
+@section('css')
 @endsection
 
 @section('content')
-
     @component('components.breadcrumb')
-        @slot('li_1')
-            Utility
-        @endslot
-        @slot('title')
-            Starter Page
-        @endslot
+        @slot('li_1')  {{$subTitle}} @endslot
+        @slot('title') {{$title}} @endslot
     @endcomponent
 
 @endsection

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -43,6 +44,7 @@ Route::middleware('auth')->group(callback: function () {
         'sales' => SaleController::class,
         'saleReturns' => SaleReturnController::class,
         'stock' => StockController::class,
+        'customer' => CustomerController::class,
         'accounts' => AccountController::class,
     ]);
 });

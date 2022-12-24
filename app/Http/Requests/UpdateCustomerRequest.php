@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePurchaseRequest extends FormRequest
+class UpdateCustomerRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class StorePurchaseRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,9 +24,7 @@ class StorePurchaseRequest extends FormRequest
     public function rules()
     {
         return [
-            'from_date' => 'nullable|date|before_or_equal:to_date',
-            'to_date' => 'nullable|date|after_or_equal:from_date',
-            'product_id' => 'nullable',
+            //
         ];
     }
 }

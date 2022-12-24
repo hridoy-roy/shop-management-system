@@ -13,12 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('purchase_returns', function (Blueprint $table) {
+        Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->string('purchase_return_num')->unique();
-            $table->date('date')->default(now());
-            $table->decimal('amount',9,2);
-            $table->enum('type',App\Utility\Utility::$type)->default('Checked');
+            $table->string('name');
+            $table->string('address')->nullable();
+            $table->date('joining_date')->nullable()->default(now());
+            $table->string('rating')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->binary('avatar')->nullable();
+            $table->boolean('status')->default(true);
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();
@@ -32,6 +36,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('purchase_returns');
+        Schema::dropIfExists('customers');
     }
 };
