@@ -59,6 +59,7 @@ class SaleReturn extends Component
             DB::beginTransaction();
             $sale = \App\Models\SaleReturn::create([
                 'sale_return_num' => $this->SaleReturnId(),
+                'amount' =>  $this->finalTotal,
                 'created_by' => \Auth::user()->name,
             ]);
             $sale->saleReturnDetails()->createMany($this->saleReturnDetails($this->validate()));

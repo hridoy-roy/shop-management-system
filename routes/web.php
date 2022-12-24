@@ -47,6 +47,7 @@ Route::middleware('auth')->group(callback: function () {
         'customer' => CustomerController::class,
         'accounts' => AccountController::class,
     ]);
+    Route::get('/sales/hold/list', [SaleController::class, 'holdList'])->name('sale.hold.list');
 });
 
 require __DIR__ . '/auth.php';

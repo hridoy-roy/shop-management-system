@@ -93,4 +93,15 @@ class SaleController extends Controller
     {
         //
     }
+
+    public function holdList()
+    {
+        $data = [
+            'subTitle' => 'Sale Hold list',
+            'title' => 'Sale',
+            'sales' => Sale::where('type','Hold')->latest()->take(2000)->get(),
+        ];
+        return view('sale.hold-list', $data);
+    }
+
 }

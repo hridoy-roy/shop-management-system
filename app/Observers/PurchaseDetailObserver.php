@@ -27,7 +27,7 @@ class PurchaseDetailObserver
         $stock->lot_no = $purchaseDetail->purchase->id;
         $stock->stocksable_id = $purchaseDetail->id;
         $stock->stocksable_type = PurchaseDetail::class;
-        $stock->created_by = Auth()->user()->name;
+        $stock->created_by = Auth()->user()->name ?? 'seed';
         $stock->saveQuietly();
     }
 

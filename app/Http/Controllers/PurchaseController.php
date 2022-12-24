@@ -12,6 +12,7 @@ use App\Treat\PurchaseId;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 
 class PurchaseController extends Controller
 {
@@ -56,13 +57,27 @@ class PurchaseController extends Controller
      */
     public function store(StorePurchaseRequest $request)
     {
-        $purchase = Purchase::whereDate('date','>=',$request->from_date)->whereDate('date','<=',$request->to_date)->get();
-        dd($purchase);
+        if ($request->from_date && $request->to_date && $request->product_id){
+            $purchase = PurchaseDetail::whereHas(
+                'purchase', function (Builder $q) use ($request){$q->whereDate('date','>=', $request->from_date)->whereDate('date','<=',$request->to_date);
+                })->where('product_id',$request->product_id)->get();
+        }elseif ($request->from_date && $request->to_date){
+        $purchase = $purchase = PurchaseDetail::whereHas(
+            'purchase', function (Builder $q) use ($request){$q->whereDate('date','>=', $request->from_date)->whereDate('date','<=',$request->to_date);
+        })->get();
+        }elseif($request->product_id){
+            $purchase = PurchaseDetail::where('product_id',$request->product_id)->get();
+        }else{
+            $purchase = [];
+        }
 
         $data = [
             'subTitle' => 'Purchase list',
             'title' => 'Purchase',
-//            'purchases' => ,
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'product_id' => $request->product_id,
+            'purchases' => $purchase,
             'products' => Product::where('status','1')->get(),
         ];
         return view('purchases.list', $data);

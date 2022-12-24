@@ -60,6 +60,7 @@ class PurchaseReturn extends Component
             DB::beginTransaction();
             $purchase = \App\Models\PurchaseReturn::create([
                 'purchase_return_num' => $this->PurchaseReturnId(),
+                'amount' =>  $this->finalTotal,
                 'created_by' => \Auth::user()->name,
             ]);
             $purchase->purchaseReturnDetails()->createMany($this->purchaseReturnDetails($this->validate()));

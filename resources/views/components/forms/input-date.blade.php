@@ -7,8 +7,8 @@
                {{ $required ? 'required' : ''}}
                value="{{$value}}"
                class="form-control @error($name) is-invalid @enderror"
-               placeholder="dd M, yyyy"
-               data-date-format="dd-m-yyyy" data-date-container='#datepicker2'
+               placeholder="yyyy-m-dd"
+               data-date-format="yyyy-m-dd" data-date-container='#datepicker2'
                data-provide="datepicker" data-date-autoclose="true">
         <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
     </div><!-- input-group -->

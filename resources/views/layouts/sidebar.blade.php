@@ -72,7 +72,7 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
                         <li><a href="{{route('sales.create')}}" key="t-level-1-1">Sales order</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Sales Hold</a></li>
+                        <li><a href="{{route('sale.hold.list')}}" key="t-level-1-1">Sales Hold</a></li>
                         <li><a href="{{route('sales.index')}}" key="t-level-1-1">Sales Reports</a></li>
                     </ul>
                 </li>

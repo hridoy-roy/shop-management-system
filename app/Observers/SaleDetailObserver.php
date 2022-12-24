@@ -25,7 +25,7 @@ class SaleDetailObserver
         $stock->lot_no = $saleDetail->sale->id;
         $stock->stocksable_id = $saleDetail->id;
         $stock->stocksable_type = SaleDetail::class;
-        $stock->created_by = Auth()->user()->name;
+        $stock->created_by = Auth()->user()->name ?? 'seeder';
         $stock->saveQuietly();
     }
 

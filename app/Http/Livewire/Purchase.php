@@ -60,6 +60,7 @@ class Purchase extends Component
             DB::beginTransaction();
             $purchase = \App\Models\Purchase::create([
                 'purchase_num' => $this->purchaseId(),
+                'amount' =>  $this->finalTotal,
                 'created_by' => \Auth::user()->name,
             ]);
             $purchase->purchaseDetails()->createMany($this->purchseDetails($this->validate()));
