@@ -20,7 +20,7 @@ class PurchaseFactory extends Factory
             'purchase_num' => fake()->numberBetween(),
             'date' => fake()->dateTimeBetween('-2 month','+2 month'),
             'amount' => fake()->numberBetween(100,300),
-            'type' => 'Checked',
+            'type' => 'Cash',
             'created_by' => 'Admin Seeder'
         ];
     }

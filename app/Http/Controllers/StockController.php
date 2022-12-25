@@ -15,7 +15,9 @@ class StockController extends Controller
      */
     public function index()
     {
-        //
+        $stock = Stock::withCount()
+            ->groupBy('product_id');
+        dd($stock);
     }
 
     /**

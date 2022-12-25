@@ -26,6 +26,8 @@ class Sale extends Component
     public $customer_id;
     public $discount;
     public $type;
+    public $saleId;
+    public $sale;
     public $productAvailable;
 
     protected $rules = [
@@ -48,7 +50,7 @@ class Sale extends Component
         if (str_starts_with($name, 'price.')) {
             $nameKey = explode(".", $name);
             $this->singlePrice = $value;
-            $this->finalTotal = array_sum($this->total) ;
+            $this->finalTotal = array_sum($this->total);
         }
         if (str_starts_with($name, 'quantity.')) {
             $nameKey = explode(".", $name);
@@ -56,10 +58,10 @@ class Sale extends Component
             $this->finalTotal = array_sum($this->total) - $this->discount;
             $this->totalQty = array_sum($this->quantity);
         }
-        if ($name =='discount') {
+        if ($name == 'discount') {
             $this->finalTotal = (!is_null(array_sum($this->total)) ?? 0) - (is_numeric($this->discount) ? $this->discount : 0);
-            if (isset($this->quantity)){
-            $this->totalQty = array_sum($this->quantity) ?? 0;
+            if (isset($this->quantity)) {
+                $this->totalQty = array_sum($this->quantity) ?? 0;
             }
         }
     }
@@ -90,6 +92,34 @@ class Sale extends Component
         return redirect()->back();
     }
 
+    public function update()
+    {
+        try {
+            DB::beginTransaction();
+            $this->sale->update([
+                'sale_num' => $this->saleId,
+                'customer_id' => $this->customer_id,
+                'amount' => $this->finalTotal,
+                'discount' => $this->discount,
+                'type' => $this->type,
+                'updated_by' => \Auth::user()->name,
+            ]);
+            $this->sale->saleDetails()->delete();
+            $this->sale->saleDetails()->createMany($this->saleDetails($this->validate()));
+            DB::commit();
+            $this->reset();
+            $this->redirectRoute('sales.index');
+        } catch (Throwable $e) {
+            DB::rollBack();
+            report($e);
+            toastr()->error('Data Not Updated successfully!');
+            $this->reset();
+            return redirect()->back();
+        }
+        toastr()->success('Data has been Updated successfully!');
+        return redirect()->back();
+    }
+
 
     public function saleDetails(array $data): array
     {
@@ -108,6 +138,28 @@ class Sale extends Component
 
         return $purchaseDetails ?? [];
     }
+
+    public function mount()
+    {
+        if ($this->sale) {
+            $this->customer_id = $this->sale->customer_id;
+            $this->saleId = $this->sale->sale_num;
+            $this->finalTotal = $this->sale->amount;
+            $this->discount = $this->sale->discount;
+            $this->type = 'Checked';
+            foreach ($this->sale->saleDetails as $key => $saleDetail){
+                $this->product_id[$key] =  $saleDetail->product_id;
+                $this->productunit[$key] =  $saleDetail->product->unit_name;
+                $this->price[$key] =  $saleDetail->rate;
+                $this->totalQty += $saleDetail->qty;
+                $this->quantity[$key] =  $saleDetail->qty;
+                $this->total[$key] =  $saleDetail->amount;
+            }
+        }else{
+            $this->saleId = $this->saleId();
+        }
+    }
+
     public function render()
     {
         $data = [
@@ -115,7 +167,6 @@ class Sale extends Component
             'title' => 'Purchase',
             'products' => Product::where('status', 1)->get(),
             'customers' => Customer::where('status', 1)->get(),
-            'saleId' => $this->saleId(),
         ];
         return view('livewire.sale', $data);
     }

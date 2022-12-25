@@ -68,7 +68,12 @@ class SaleController extends Controller
      */
     public function edit(Sale $sale)
     {
-        //
+        $data = [
+            'title' => 'Sale Edit',
+            'subTitle' => 'Sale Info',
+            'sale' => $sale,
+        ];
+        return view('sale.edit', $data);
     }
 
     /**

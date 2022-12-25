@@ -41,15 +41,15 @@
                             </div>
                         </div>
                     </div>
-                    <form wire:submit.prevent="submit">
+                    <form wire:submit.prevent={{$sale ? 'update': 'submit'}}>
                         <div class="row mx-4">
                             <div class="col-md-4">
                                 <x-forms.select label="Customer" name="customer_id"
-                                                :options="$customers"></x-forms.select>
+                                                :options="$customers" :required=false ></x-forms.select>
                             </div>
                             <div class="col-md-4">
                                 <x-forms.input label="Discount" type="number" name="discount"
-                                               placeholder="Discount "></x-forms.input>
+                                               placeholder="Discount" :required=false></x-forms.input>
                             </div>
                             <div class="col-md-4">
                                 <x-forms.select label="Sale Type" name="type"
@@ -103,10 +103,17 @@
                         @endforeach
                         <div class="row mx-4">
                             <div class="col-md-12 text-center">
-                                <button type="submit" class="btn btn-lg btn-success mt-3 mt-lg-0">
-                                    <i class="fas fa-save"></i>
-                                    Submit
-                                </button>
+                                @if($sale)
+                                    <button type="submit" class="btn btn-lg btn-success mt-3 mt-lg-0">
+                                        <i class="fas fa-save"></i>
+                                        Update
+                                    </button>
+                                @else
+                                    <button type="submit" class="btn btn-lg btn-success mt-3 mt-lg-0">
+                                        <i class="fas fa-save"></i>
+                                        Submit
+                                    </button>
+                                @endif
                             </div>
                         </div>
                     </form>

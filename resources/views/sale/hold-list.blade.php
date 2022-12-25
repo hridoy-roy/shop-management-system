@@ -31,6 +31,7 @@
                                 <th>Discount</th>
                                 <th>Type</th>
                                 <th>Created By</th>
+                                <th class="text-center"><i class="mdi mdi-tools font-size-32 text-warning me-1"></i></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -44,6 +45,25 @@
                                     <td>{{$sale->discount}}</td>
                                     <td>{{$sale->type}}</td>
                                     <td>{{$sale->created_by}}</td>
+                                    <td>
+                                        <div class="dropdown text-center">
+                                            <a href="#" class="dropdown-toggle card-drop" data-bs-toggle="dropdown"
+                                               aria-expanded="false">
+                                                <i class="mdi mdi-dots-horizontal font-size-18"></i>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><a href="{{route('sales.edit',$sale->id)}}" class="dropdown-item"><i
+                                                            class="mdi mdi-pencil font-size-16 text-primary me-1"></i>
+                                                        Edit</a></li>
+                                                <li><a href="#" class="dropdown-item"><i
+                                                            class="mdi mdi-cash-check font-size-16 text-success me-1"></i>
+                                                        Confirm</a></li>
+                                                <li><a href="#" class="dropdown-item"><i
+                                                            class="mdi mdi-trash-can font-size-16 text-danger me-1"></i>
+                                                        Delete</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
                                 </tr>
                             @empty
                                 <tr class="text-center">

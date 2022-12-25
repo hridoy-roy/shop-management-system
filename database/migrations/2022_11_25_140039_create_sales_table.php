@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('date')->default(now());
             $table->decimal('amount',9,2);
             $table->decimal('discount',9,2);
-            $table->enum('type',App\Utility\Utility::$type)->default('Checked');
+            $table->enum('type',App\Utility\Utility::$type)->default('Cash');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();

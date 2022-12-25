@@ -4,12 +4,12 @@ namespace App\Utility;
 
 class Utility
 {
-    const ACTIVE = "Action";
-    const INACTIVE = "In Action";
-    const PES = "pes";
+    const ACTIVE = "Active";
+    const INACTIVE = "In Active";
+    const PES = "Pes";
     const KG = "kg";
     const LITER = "liter";
-    const CHECKED = 'Checked';
+    const CHECKED = 'Cash';
     const HOLD = 'Hold';
 
 

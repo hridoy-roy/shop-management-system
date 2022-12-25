@@ -15,6 +15,7 @@ class SaleDetailObserver
      */
     public function created(SaleDetail $saleDetail)
     {
+        if ($saleDetail->sale->type != 'Hold'){
         $stock = new Stock();
         $stock->product_id = $saleDetail->product_id;
         $stock->product_out = $saleDetail->qty;
@@ -27,6 +28,7 @@ class SaleDetailObserver
         $stock->stocksable_type = SaleDetail::class;
         $stock->created_by = Auth()->user()->name ?? 'seeder';
         $stock->saveQuietly();
+        }
     }
 
     /**
@@ -37,7 +39,20 @@ class SaleDetailObserver
      */
     public function updated(SaleDetail $saleDetail)
     {
-        //
+        if ($saleDetail->sale->type != 'Hold'){
+            $stock = new Stock();
+            $stock->product_id = $saleDetail->product_id;
+            $stock->product_out = $saleDetail->qty;
+            $stock->price = $saleDetail->rate;
+            $stock->amount = $saleDetail->amount;
+            $stock->tr_no = $saleDetail->sale->id;
+            $stock->tr_from = "Sale";
+            $stock->lot_no = $saleDetail->sale->id;
+            $stock->stocksable_id = $saleDetail->id;
+            $stock->stocksable_type = SaleDetail::class;
+            $stock->created_by = Auth()->user()->name ?? 'seeder';
+            $stock->saveQuietly();
+        }
     }
 
     /**
