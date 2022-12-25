@@ -50,7 +50,7 @@
                         <span key="t-multi-level">Stock </span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Present Stock</a></li>
+                        <li><a href="{{route('stock.index')}}" key="t-level-1-1">Present Stock</a></li>
                         <li><a href="javascript: void(0);" key="t-level-1-1">Transaction Reports</a></li>
                     </ul>
                 </li>

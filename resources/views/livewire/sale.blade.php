@@ -71,7 +71,7 @@
                                 <div class="col-lg-1">
                                     <div class="mb-3">
                                         <label>Stock</label>
-                                        <p class="form-control">{{$availableStock[$key] ?? 0}}</p>
+                                        <p class="form-control">{{$productAvailable[$key] ?? 0}}</p>
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
@@ -105,7 +105,7 @@
                             <div class="col-md-12 text-center">
                                 @if($sale)
                                     <button type="submit" class="btn btn-lg btn-success mt-3 mt-lg-0">
-                                        <i class="fas fa-save"></i>
+                                        <i class="mdi mdi-check-bold"></i>
                                         Update
                                     </button>
                                 @else

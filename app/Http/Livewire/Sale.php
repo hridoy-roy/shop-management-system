@@ -43,9 +43,12 @@ class Sale extends Component
 
         if (str_starts_with($name, 'product_id.')) {
             $nameKey = explode(".", $name);
-            $product = Product::find($value);
+            $product = Product::withSum('stock as total_in', 'product_in')
+                ->withSum('stock as total_out', 'product_out')
+                ->find($value);
             $this->productunit[$nameKey[1]] = $product->unit_name;
             $this->productCategory[$nameKey[1]] = $product->category->name;
+            $this->productAvailable[$nameKey[1]] = $product->total_in - $product->total_out;
         }
         if (str_starts_with($name, 'price.')) {
             $nameKey = explode(".", $name);
@@ -81,6 +84,7 @@ class Sale extends Component
             $sale->saleDetails()->createMany($this->saleDetails($this->validate()));
             DB::commit();
             $this->reset();
+            $this->saleId = $this->saleId();
         } catch (Throwable $e) {
             DB::rollBack();
             report($e);
@@ -146,16 +150,17 @@ class Sale extends Component
             $this->saleId = $this->sale->sale_num;
             $this->finalTotal = $this->sale->amount;
             $this->discount = $this->sale->discount;
-            $this->type = 'Checked';
-            foreach ($this->sale->saleDetails as $key => $saleDetail){
-                $this->product_id[$key] =  $saleDetail->product_id;
-                $this->productunit[$key] =  $saleDetail->product->unit_name;
-                $this->price[$key] =  $saleDetail->rate;
+            $this->type = 'Cash';
+            foreach ($this->sale->saleDetails as $key => $saleDetail) {
+                $this->product_id[$key] = $saleDetail->product_id;
+                $this->productunit[$key] = $saleDetail->product->unit_name;
+                $this->price[$key] = $saleDetail->rate;
                 $this->totalQty += $saleDetail->qty;
-                $this->quantity[$key] =  $saleDetail->qty;
-                $this->total[$key] =  $saleDetail->amount;
+                $this->quantity[$key] = $saleDetail->qty;
+                $this->total[$key] = $saleDetail->amount;
+                $this->repeater[$key] = +1;
             }
-        }else{
+        } else {
             $this->saleId = $this->saleId();
         }
     }
