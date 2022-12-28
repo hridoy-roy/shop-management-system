@@ -17,6 +17,10 @@ class PurchaseDetailObserver
      */
     public function created(PurchaseDetail $purchaseDetail)
     {
+        $product = Product::find($purchaseDetail->product_id);
+        $product->price = $purchaseDetail->rate;
+        $product->saveQuietly();
+
         $stock = new Stock();
         $stock->product_id = $purchaseDetail->product_id;
         $stock->product_in = $purchaseDetail->qty;

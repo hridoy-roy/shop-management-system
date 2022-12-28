@@ -69,7 +69,7 @@ class PurchaseController extends Controller
                 $q->whereDate('date', '>=', $request->from_date)->whereDate('date', '<=', $request->to_date);
             })->where('product_id', $request->product_id)->get();
         } elseif ($request->from_date && $request->to_date) {
-            $purchase = $purchase = PurchaseDetail::whereHas(
+            $purchase = PurchaseDetail::whereHas(
                 'purchase', function (Builder $q) use ($request) {
                 $q->whereDate('date', '>=', $request->from_date)->whereDate('date', '<=', $request->to_date);
             })->get();

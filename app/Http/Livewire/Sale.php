@@ -62,7 +62,7 @@ class Sale extends Component
             $this->totalQty = array_sum($this->quantity);
         }
         if ($name == 'discount') {
-            $this->finalTotal = (!is_null(array_sum($this->total)) ?? 0) - (is_numeric($this->discount) ? $this->discount : 0);
+            $this->finalTotal = (array_sum($this->total) ?? 0) - (is_numeric($this->discount) ? $this->discount : 0);
             if (isset($this->quantity)) {
                 $this->totalQty = array_sum($this->quantity) ?? 0;
             }
@@ -169,7 +169,7 @@ class Sale extends Component
     {
         $data = [
             'subTitle' => 'Sale Info',
-            'title' => 'Purchase',
+            'title' => 'Sale',
             'products' => Product::where('status', 1)->get(),
             'customers' => Customer::where('status', 1)->get(),
         ];

@@ -33,8 +33,8 @@
                                 <th>Product name</th>
                                 <th>Category</th>
                                 <th>Unit</th>
-                                <th>In</th>
-                                <th>Out</th>
+                                <th>Total In</th>
+                                <th>Total Out</th>
                                 <th>Available</th>
                             </tr>
                             </thead>

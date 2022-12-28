@@ -1,59 +1,50 @@
 <div>
-    <div class="row">
-        <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Sale Number <span class="text-warning">#{{$saleId}}</span></h4>
+    <form wire:submit.prevent={{$sale ? 'update': 'submit'}}>
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title mb-5">{{$title}} Number <span class="text-warning">#{{$saleId}}</span></h4>
+                        <x-forms.select label="Customer" name="customer_id"
+                                        :options="$customers" :required=false></x-forms.select>
+                    </div>
+                    <!-- end card body -->
                 </div>
-                <!-- end card body -->
+                <!-- end card -->
             </div>
-            <!-- end card -->
-        </div>
-        <div class="col-xl-6">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Final Sum <span class="text-success">: {{$finalTotal}}</span></h4>
-                    <h4 class="card-title">Total Qty <span class="text-success">: {{$totalQty}}</span></h4>
+            <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-body">
+                        <x-forms.select label="Sale Type" name="type"
+                                        :options=$utility::$type></x-forms.select>
+                        <x-forms.input label="Discount" type="number" name="discount"
+                                       placeholder="Discount" :required=false></x-forms.input>
+                    </div>
+                    <!-- end card body -->
                 </div>
-                <!-- end card body -->
+                <!-- end card -->
             </div>
-            <!-- end card -->
+            <!-- end col -->
         </div>
-        <!-- end col -->
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row mx-4">
-                        <div class="col-md-6">
-                            <h3 class="card-title mb-4">{{$title}} Create</h3>
-                        </div>
-                        <div class="col-md-6">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+
+                        <div class="row my-3">
+                            <div class="col-md-6">
+                                <h3 class="card-title">{{$title}} Create Details</h3>
+                            </div>
+                            <div class="col-md-6">
                              <span wire:loading.remove data-bs-toggle="tooltip" data-bs-placement="top" title=""
                                    data-bs-original-title="Add New" class="btn btn-success mt-3 mt-lg-0 float-end"
                                    wire:click="addRow()">
                                     <i class="fas fa-plus-circle"></i>
                                     Row
                                 </span>
-                            <div wire:loading class="spinner-border spinner-border-sm text-dark">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </div>
-                    </div>
-                    <form wire:submit.prevent={{$sale ? 'update': 'submit'}}>
-                        <div class="row mx-4">
-                            <div class="col-md-4">
-                                <x-forms.select label="Customer" name="customer_id"
-                                                :options="$customers" :required=false ></x-forms.select>
-                            </div>
-                            <div class="col-md-4">
-                                <x-forms.input label="Discount" type="number" name="discount"
-                                               placeholder="Discount" :required=false></x-forms.input>
-                            </div>
-                            <div class="col-md-4">
-                                <x-forms.select label="Sale Type" name="type"
-                                                :options=$utility::$type></x-forms.select>
+                                <div wire:loading class="spinner-border spinner-border-sm text-dark">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
                             </div>
                         </div>
                         @foreach($repeater as $key => $row)
@@ -101,6 +92,15 @@
                                 </div>
                             </div>
                         @endforeach
+                        <div class="row  mt-4 justify-content-end">
+                            <div class="col-lg-2">
+                                <h4 class="card-title">Total Qty <span class="text-success">: {{$totalQty}}</span></h4>
+                            </div>
+                            <div class="col-lg-2">
+                                <h4 class="card-title">Final Sum <span class="text-success">: {{$finalTotal}}</span>
+                                </h4>
+                            </div>
+                        </div>
                         <div class="row mx-4">
                             <div class="col-md-12 text-center">
                                 @if($sale)
@@ -116,9 +116,9 @@
                                 @endif
                             </div>
                         </div>
-                    </form>
-
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
+</div>

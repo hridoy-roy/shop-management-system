@@ -14,7 +14,6 @@
                         <span key="t-multi-level">Account</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Create Ledger</a></li>
                         <li><a href="javascript: void(0);" key="t-level-1-1">Cash Withdraw</a></li>
                         <li><a href="javascript: void(0);" key="t-level-1-1">Cash Withdraw Hold</a></li>
                         <li><a href="javascript: void(0);" key="t-level-1-1">Balance Sheet</a></li>
@@ -39,7 +38,6 @@
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
                         <li><a href="{{route('purchases.create')}}" key="t-level-1-1">Purchase Order</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Purchase Hold</a></li>
                         <li><a href="{{route('purchases.index')}}" key="t-level-1-1">Purchase Report</a></li>
                     </ul>
                 </li>
@@ -82,10 +80,10 @@
                         <span key="t-multi-level">Return</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Sales Return</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Purchase Return</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Sales Return Reports</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Purchase Return Reports</a></li>
+                        <li><a href="{{route('saleReturns.create')}}" key="t-level-1-1">Sales Return</a></li>
+                        <li><a href="{{route('purchaseReturns.create')}}" key="t-level-1-1">Purchase Return</a></li>
+                        <li><a href="{{route('saleReturns.index')}}" key="t-level-1-1">Sales Return Reports</a></li>
+                        <li><a href="{{route('purchaseReturns.index')}}" key="t-level-1-1">Purchase Return Reports</a></li>
                     </ul>
                 </li>
 

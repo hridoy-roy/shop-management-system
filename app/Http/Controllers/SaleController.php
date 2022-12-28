@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\Sale;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
 use App\Models\SaleDetail;
+use Illuminate\Database\Eloquent\Builder;
 
 class SaleController extends Controller
 {
@@ -19,7 +21,16 @@ class SaleController extends Controller
         $data = [
             'subTitle' => 'Sale list',
             'title' => 'Sale',
-            'sales' => SaleDetail::latest()->take(2000)->get(),
+            'from_date' => date('Y-m-01'),
+            'to_date' => date('Y-m-d'),
+            'product_id' => '',
+            'products' => Product::where('status', '1')->get(),
+            'sales' => SaleDetail::whereHas(
+                'sale', function (Builder $q) {
+                $q->whereDate('date', '>=', date('Y-m-01'))
+                    ->whereDate('date', '<=', date('Y-m-d'))
+                    ->where('type', 'Cash');
+            })->get(),
         ];
         return view('sale.list', $data);
     }
@@ -41,18 +52,50 @@ class SaleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreSaleRequest  $request
+     * @param \App\Http\Requests\StoreSaleRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StoreSaleRequest $request)
     {
-        //
+        if ($request->from_date && $request->to_date && $request->product_id) {
+            $sales = SaleDetail::whereHas(
+                'sale', function (Builder $q) use ($request) {
+                $q->whereDate('date', '>=', $request->from_date)
+                    ->whereDate('date', '<=', $request->to_date)
+                    ->where('type', 'Cash');
+            })->where('product_id', $request->product_id)->get();
+        } elseif ($request->from_date && $request->to_date) {
+            $sales = SaleDetail::whereHas(
+                'sale', function (Builder $q) use ($request) {
+                $q->whereDate('date', '>=', $request->from_date)
+                    ->whereDate('date', '<=', $request->to_date)
+                    ->where('type', 'Cash');
+            })->get();
+        } elseif ($request->product_id) {
+            $sales = SaleDetail::whereHas(
+                'sale', function (Builder $q) use ($request) {
+                $q->where('type', 'Cash');
+            })->where('product_id', $request->product_id)->get();
+        } else {
+            $sales = [];
+        }
+
+        $data = [
+            'subTitle' => 'Sale list',
+            'title' => 'Sale',
+            'from_date' => date('Y-m-01'),
+            'to_date' => date('Y-m-d'),
+            'product_id' => '',
+            'products' => Product::where('status', '1')->get(),
+            'sales' => $sales,
+        ];
+        return view('sale.list', $data);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Sale  $sale
+     * @param \App\Models\Sale $sale
      * @return \Illuminate\Http\Response
      */
     public function show(Sale $sale)
@@ -63,7 +106,7 @@ class SaleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Sale  $sale
+     * @param \App\Models\Sale $sale
      * @return \Illuminate\Http\Response
      */
     public function edit(Sale $sale)
@@ -79,8 +122,8 @@ class SaleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdateSaleRequest  $request
-     * @param  \App\Models\Sale  $sale
+     * @param \App\Http\Requests\UpdateSaleRequest $request
+     * @param \App\Models\Sale $sale
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateSaleRequest $request, Sale $sale)
@@ -91,7 +134,7 @@ class SaleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Sale  $sale
+     * @param \App\Models\Sale $sale
      * @return \Illuminate\Http\Response
      */
     public function destroy(Sale $sale)
@@ -104,7 +147,7 @@ class SaleController extends Controller
         $data = [
             'subTitle' => 'Sale Hold list',
             'title' => 'Sale',
-            'sales' => Sale::where('type','Hold')->latest()->take(2000)->get(),
+            'sales' => Sale::where('type', 'Hold')->latest()->take(2000)->get(),
         ];
         return view('sale.hold-list', $data);
     }

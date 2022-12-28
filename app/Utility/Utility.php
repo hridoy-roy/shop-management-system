@@ -9,8 +9,11 @@ class Utility
     const PES = "Pes";
     const KG = "kg";
     const LITER = "liter";
-    const CHECKED = 'Cash';
+    const CASH = 'Cash';
     const HOLD = 'Hold';
+    const STOCK = 'Stock';
+    const SALE = 'Sale';
+    const PURCHASE = 'Purchase';
 
 
     public static array $status = [
@@ -25,7 +28,17 @@ class Utility
     ];
 
     public static array $type = [
-        self::CHECKED => self::CHECKED,
+        self::CASH => self::CASH,
         self::HOLD => self::HOLD,
+    ];
+
+    public static array $leaser = [
+        self::CASH => self::CASH,
+        self::STOCK => self::STOCK,
+    ];
+
+    public static array $transaction = [
+        self::SALE => self::SALE,
+        self::PURCHASE => self::PURCHASE,
     ];
 }

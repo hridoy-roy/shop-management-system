@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->date('date')->default(now());
+            $table->date('date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->foreignIdFor(\App\Models\Product::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->integer('product_in')->default(0);
             $table->integer('product_out')->default(0);

@@ -28,40 +28,38 @@
                     <p class="card-title-desc">
                         {{$subTitle}}
                     </p>
-                    @include('layouts.report-form', ['path' => 'purchases.store'])
+                    @include('layouts.report-form', ['path' => 'stock.store','type' => true])
                     <div class="table-responsive">
                         <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
                             <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Purchase Num</th>
-                                <th>Date</th>
                                 <th>Product</th>
+                                <th>Date</th>
+                                <th>In</th>
+                                <th>Out</th>
                                 <th>Rate</th>
-                                <th>QTY</th>
                                 <th>Amount</th>
-                                <th>Unit</th>
                                 <th>Type</th>
                                 <th>Created By</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @forelse($purchases as $purchase)
+                            @forelse($stocks as $stock)
                                 <tr>
                                     <th scope="row">{{++$loop->index}}</th>
-                                    <td>{{$purchase->purchase->purchase_num}}</td>
-                                    <td>{{$purchase->purchase->date}}</td>
-                                    <td>{{$purchase->product->name}}</td>
-                                    <td>{{$purchase->rate}}</td>
-                                    <td>{{$purchase->qty}}</td>
-                                    <td>{{$purchase->amount}}</td>
-                                    <td>{{$purchase->product->unit_name}}</td>
-                                    <td>{{$purchase->purchase->type}}</td>
-                                    <td>{{$purchase->purchase->created_by}}</td>
+                                    <td>{{$stock->product->name}}</td>
+                                    <td>{{$stock->date}}</td>
+                                    <td>{{$stock->product_in}}</td>
+                                    <td>{{$stock->product_out}}</td>
+                                    <td>{{$stock->price}}</td>
+                                    <td>{{$stock->amount}}</td>
+                                    <td>{{$stock->tr_from}}</td>
+                                    <td>{{$stock->created_by}}</td>
                                 </tr>
                             @empty
                                 <tr class="text-center">
-                                    <td colspan="10"><strong class="text-danger">No Data</strong></td>
+                                    <td colspan="9"><strong class="text-danger">No Data</strong></td>
                                 </tr>
                             @endforelse
                             </tbody>
@@ -83,5 +81,6 @@
     <script src="{{ asset('assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
     <!-- Datatable init js -->
     <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
+
 @endsection
 

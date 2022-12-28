@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('sale_returns', function (Blueprint $table) {
             $table->id();
             $table->string('sale_return_num')->unique();
-            $table->date('date')->default(now());
+            $table->date('date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->decimal('amount',9,2);
             $table->enum('type',App\Utility\Utility::$type)->default('Cash');
             $table->string('created_by')->nullable();

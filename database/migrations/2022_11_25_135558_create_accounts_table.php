@@ -15,15 +15,16 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Ledger::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->string('leaser_name');
             $table->date('date')->default(now());
-            $table->decimal('debit',9,2);
-            $table->decimal('credit',9,2);
+            $table->decimal('debit',9,2)->default(0);
+            $table->decimal('credit',9,2)->default(0);
             $table->text('note')->nullable();
             $table->integer('transaction_num');
             $table->string('transaction_name');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
+            $table->morphs('accountable');
             $table->timestamps();
         });
     }

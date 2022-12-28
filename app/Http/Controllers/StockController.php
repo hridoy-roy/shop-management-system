@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateStockRequest;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Response;
 
 class StockController extends Controller
@@ -34,11 +35,21 @@ class StockController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Application|Factory|View
      */
-    public function create()
+    public function create(): View|Factory|Application
     {
-        //
+        $data = [
+            'subTitle' => 'Stock Transaction list',
+            'title' => 'Stock Transaction',
+            'from_date' => date('Y-m-01'),
+            'to_date' => date('Y-m-d'),
+            'products' => Product::where('status', '1')->get(),
+            'type' => '',
+            'product_id' => '',
+            'stocks' => Stock::whereDate('date', '>=', date('Y-m-01'))->whereDate('date', '<=', date('Y-m-d'))->get(),
+        ];
+        return view('stock.transaction', $data);
     }
 
     /**
@@ -49,7 +60,32 @@ class StockController extends Controller
      */
     public function store(StoreStockRequest $request)
     {
-        //
+        if ($request->from_date && $request->to_date && $request->product_id) {
+            $stocks = Stock::whereHas(
+                'purchase', function (Builder $q) use ($request) {
+                $q->whereDate('date', '>=', $request->from_date)->whereDate('date', '<=', $request->to_date);
+            })->where('product_id', $request->product_id)->get();
+        } elseif ($request->from_date && $request->to_date) {
+            $stocks = $stocks = Stock::whereHas(
+                'purchase', function (Builder $q) use ($request) {
+                $q->whereDate('date', '>=', $request->from_date)->whereDate('date', '<=', $request->to_date);
+            })->get();
+        } elseif ($request->product_id) {
+            $stocks = Stock::where('product_id', $request->product_id)->get();
+        } else {
+            $stocks = [];
+        }
+
+        $data = [
+            'subTitle' => 'Stock Transaction list',
+            'title' => 'Stock Transaction',
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'product_id' => $request->product_id,
+            'stocks' => $stocks,
+            'products' => Product::where('status', '1')->get(),
+        ];
+        return view('stock.transaction', $data);
     }
 
     /**
