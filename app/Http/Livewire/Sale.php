@@ -32,8 +32,8 @@ class Sale extends Component
 
     protected $rules = [
         'product_id.*' => 'required',
-        'price.*' => 'required|integer',
-        'quantity.*' => 'required',
+        'price.*' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+        'quantity.*' => 'required|integer',
     ];
 
 
@@ -159,6 +159,10 @@ class Sale extends Component
                 $this->quantity[$key] = $saleDetail->qty;
                 $this->total[$key] = $saleDetail->amount;
                 $this->repeater[$key] = +1;
+                $product = Product::withSum('stock as total_in', 'product_in')
+                    ->withSum('stock as total_out', 'product_out')
+                    ->find($saleDetail->product_id);
+                $this->productAvailable[$key] = $product->total_in - $product->total_out;
             }
         } else {
             $this->saleId = $this->saleId();

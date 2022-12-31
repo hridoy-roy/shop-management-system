@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,10 @@ class PurchaseReturnDetailFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'product_id' => Product::all()->random()->id,
+            'rate' => fake()->numberBetween(200,400),
+            'qty' => fake()->numberBetween(5,20),
+            'amount' => fake()->numberBetween(2000,4000),
         ];
     }
 }

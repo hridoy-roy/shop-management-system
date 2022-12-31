@@ -17,16 +17,18 @@ class SaleObserver
      */
     public function created(Sale $sale)
     {
-        $account = new Account();
-        $account->leaser_name = Utility::$leaser['Cash'];
-        $account->date = now();
-        $account->credit = $sale->amount;
-        $account->transaction_num = $sale->sale_num;
-        $account->transaction_name = Utility::$transaction['Sale'];
-        $account->accountable_type = Sale::class;
-        $account->created_by = \Auth::user()->name ?? 'seeder';
-        $account->accountable_id = $sale->id;
-        $account->saveQuietly();
+        if ($sale->type != 'Hold') {
+            $account = new Account();
+            $account->leaser_name = Utility::$leaser['Cash'];
+            $account->date = now();
+            $account->debit = $sale->amount;
+            $account->transaction_num = $sale->sale_num;
+            $account->transaction_name = Utility::$transaction['Sale'];
+            $account->accountable_type = Sale::class;
+            $account->created_by = \Auth::user()->name ?? 'seeder';
+            $account->accountable_id = $sale->id;
+            $account->saveQuietly();
+        }
     }
 
     /**
@@ -37,7 +39,18 @@ class SaleObserver
      */
     public function updated(Sale $sale)
     {
-        //
+        if ($sale->type != 'Hold') {
+            $account = new Account();
+            $account->leaser_name = Utility::$leaser['Cash'];
+            $account->date = now();
+            $account->debit = $sale->amount;
+            $account->transaction_num = $sale->sale_num;
+            $account->transaction_name = Utility::$transaction['Sale'];
+            $account->accountable_type = Sale::class;
+            $account->created_by = \Auth::user()->name ?? 'seeder';
+            $account->accountable_id = $sale->id;
+            $account->saveQuietly();
+        }
     }
 
     /**

@@ -32,11 +32,12 @@ class PurchaseController extends Controller
             'from_date' => date('Y-m-01'),
             'to_date' => date('Y-m-d'),
             'product_id' => '',
+            'products' => Product::where('status', '1')->get(),
             'purchases' => PurchaseDetail::whereHas(
                 'purchase', function (Builder $q) {
-                $q->whereDate('date', '>=', date('Y-m-01'))->whereDate('date', '<=', date('Y-m-d'));
+                $q->whereDate('date', '>=', date('Y-m-01'))
+                    ->whereDate('date', '<=', date('Y-m-d'));
             })->get(),
-            'products' => Product::where('status', '1')->get(),
         ];
         return view('purchases.list', $data);
     }
@@ -85,8 +86,8 @@ class PurchaseController extends Controller
             'from_date' => $request->from_date,
             'to_date' => $request->to_date,
             'product_id' => $request->product_id,
-            'purchases' => $purchase,
             'products' => Product::where('status', '1')->get(),
+            'purchases' => $purchase,
         ];
         return view('purchases.list', $data);
     }

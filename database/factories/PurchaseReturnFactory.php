@@ -17,7 +17,11 @@ class PurchaseReturnFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'purchase_return_num' => fake()->numberBetween(),
+            'date' => fake()->dateTimeBetween('-2 month','+2 month'),
+            'amount' => fake()->numberBetween(100,300),
+            'type' => 'Cash',
+            'created_by' => 'Admin Seeder'
         ];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Utility;
 
+use phpDocumentor\Reflection\Types\Integer;
+
 class Utility
 {
     const ACTIVE = "Active";
@@ -13,7 +15,10 @@ class Utility
     const HOLD = 'Hold';
     const STOCK = 'Stock';
     const SALE = 'Sale';
+    const SALE_RETURN = 'Sale_Return';
     const PURCHASE = 'Purchase';
+    const PURCHASE_RETURN = 'Purchase_Return';
+    public static int $minStockValue= 5;
 
 
     public static array $status = [
@@ -39,6 +44,8 @@ class Utility
 
     public static array $transaction = [
         self::SALE => self::SALE,
+        self::SALE_RETURN => self::SALE_RETURN,
         self::PURCHASE => self::PURCHASE,
+        self::PURCHASE_RETURN => self::PURCHASE_RETURN,
     ];
 }

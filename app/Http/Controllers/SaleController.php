@@ -8,6 +8,7 @@ use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
 use App\Models\SaleDetail;
 use Illuminate\Database\Eloquent\Builder;
+use phpDocumentor\Reflection\Types\True_;
 
 class SaleController extends Controller
 {
@@ -128,18 +129,18 @@ class SaleController extends Controller
      */
     public function update(UpdateSaleRequest $request, Sale $sale)
     {
-        //
+        dd();
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Sale $sale
-     * @return \Illuminate\Http\Response
+     * @return bool
      */
-    public function destroy(Sale $sale)
+    public function destroy(Sale $sale): bool
     {
-        //
+        return $sale->delete();
     }
 
     public function holdList()
@@ -151,5 +152,11 @@ class SaleController extends Controller
         ];
         return view('sale.hold-list', $data);
     }
+
+    public function holdConfirm($id)
+    {
+        return  Sale::find($id)->update(['type' => 'Cash']);
+    }
+
 
 }

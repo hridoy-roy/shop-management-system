@@ -42,14 +42,15 @@
                     </ul>
                 </li>
 
-                <li>
+                <li class="{{Request::routeIs('stock.*') ? 'mm-active': ''}}">
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="bx bx-share-alt"></i>
                         <span key="t-multi-level">Stock </span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="{{route('stock.index')}}" key="t-level-1-1">Present Stock</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Transaction Reports</a></li>
+                        <li><a href="{{route('stock.present.list')}}" key="t-level-1-1">Present Stock</a></li>
+                        <li><a href="{{route('stock.create')}}" class="{{Request::is('stock') ? 'active': ''}}"
+                               key="t-level-1-1">Transaction Reports</a></li>
                     </ul>
                 </li>
                 <li>
@@ -83,7 +84,8 @@
                         <li><a href="{{route('saleReturns.create')}}" key="t-level-1-1">Sales Return</a></li>
                         <li><a href="{{route('purchaseReturns.create')}}" key="t-level-1-1">Purchase Return</a></li>
                         <li><a href="{{route('saleReturns.index')}}" key="t-level-1-1">Sales Return Reports</a></li>
-                        <li><a href="{{route('purchaseReturns.index')}}" key="t-level-1-1">Purchase Return Reports</a></li>
+                        <li><a href="{{route('purchaseReturns.index')}}" key="t-level-1-1">Purchase Return Reports</a>
+                        </li>
                     </ul>
                 </li>
 

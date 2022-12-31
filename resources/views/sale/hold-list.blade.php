@@ -1,13 +1,21 @@
 @extends('layouts.master')
-@section('title') {{$title}} @endsection
+@section('title')
+    {{$title}}
+@endsection
 @section('css')
     <!-- DataTables -->
-    <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css"/>
+    <!-- Sweet Alert-->
+    <link href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 @section('content')
     @component('components.breadcrumb')
-        @slot('li_1')  {{$subTitle}} @endslot
-        @slot('title') {{$title}} @endslot
+        @slot('li_1')
+            {{$subTitle}}
+        @endslot
+        @slot('title')
+            {{$title}}
+        @endslot
     @endcomponent
 
     <div class="row">
@@ -31,7 +39,8 @@
                                 <th>Discount</th>
                                 <th>Type</th>
                                 <th>Created By</th>
-                                <th class="text-center"><i class="mdi mdi-tools font-size-32 text-warning me-1"></i></th>
+                                <th class="text-center"><i class="mdi mdi-tools font-size-32 text-warning me-1"></i>
+                                </th>
                             </tr>
                             </thead>
                             <tbody>
@@ -55,10 +64,13 @@
                                                 <li><a href="{{route('sales.edit',$sale->id)}}" class="dropdown-item"><i
                                                             class="mdi mdi-pencil font-size-16 text-primary me-1"></i>
                                                         Edit</a></li>
-                                                <li><a href="#" class="dropdown-item"><i
+                                                <li>
+                                                    <a href="#" onclick="holdConfirm({{$sale->id}})" class="dropdown-item"><i
                                                             class="mdi mdi-cash-check font-size-16 text-success me-1"></i>
-                                                        Confirm</a></li>
-                                                <li><a href="#" class="dropdown-item"><i
+                                                        Confirm</a>
+                                                </li>
+                                                <li><a href="#" class="dropdown-item"
+                                                       onclick="holdDelete({{$sale->id}})"><i
                                                             class="mdi mdi-trash-can font-size-16 text-danger me-1"></i>
                                                         Delete</a></li>
                                             </ul>
@@ -87,5 +99,95 @@
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
     <!-- Datatable init js -->
     <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
+    <!-- Sweet Alerts js -->
+    <script src="{{ asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+
+    <!-- Sweet alert init js-->
+    <script src="{{ asset('assets/js/pages/sweet-alerts.init.js') }}"></script>
 @endsection
 
+@section('script-bottom')
+    <script>
+        function holdDelete(Id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                confirmButtonClass: "btn btn-success mt-2",
+                cancelButtonClass: "btn btn-danger ms-2 mt-2",
+                buttonsStyling: !1
+            }).then(function (t) {
+                t.value ?  $.ajax({
+                        url: "{{ url('sales') }}" + "/" + Id,
+                        type: "delete",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                        },
+                        success: function (response) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Hole Info has been deleted.",
+                                icon: "success",
+                            });
+                            setTimeout(location.reload.bind(location), 2000);
+                        },
+                        error: function (response) {
+                            Swal.fire({
+                                title: "Fail",
+                                text: "Hold Delete Fail",
+                                icon: "error"
+                            });
+                        }
+                    }): t.dismiss === Swal.DismissReason.cancel && Swal.fire({
+                    title: "Cancelled",
+                    text: "Hold Delete Cancelled",
+                    icon: "error"
+                });
+            });
+        }
+
+
+        function holdConfirm(Id) {
+            Swal.fire({
+                title: "Are you sure?",
+                icon: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Yes, Confirm it!",
+                cancelButtonText: "No, cancel!",
+                confirmButtonClass: "btn btn-success mt-2",
+                cancelButtonClass: "btn btn-danger ms-2 mt-2",
+                buttonsStyling: !1
+            }).then(function (t) {
+                t.value ?  $.ajax({
+                    url: "{{ url('sales/hold/confirm') }}" + "/" + Id,
+                    type: "post",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            title: "Confirmed!",
+                            text: "Hole Info has been Confirm.",
+                            icon: "success",
+                        });
+                        setTimeout(location.reload.bind(location), 2000);
+                    },
+                    error: function (response) {
+                        Swal.fire({
+                            title: "Fail",
+                            text: "Hold Confirm Fail",
+                            icon: "error"
+                        });
+                    }
+                }): t.dismiss === Swal.DismissReason.cancel && Swal.fire({
+                    title: "Cancelled",
+                    text: "Hold Confirm Cancelled",
+                    icon: "error"
+                });
+            });
+        }
+    </script>
+@endsection

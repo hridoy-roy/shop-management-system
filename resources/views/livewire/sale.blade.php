@@ -4,7 +4,7 @@
             <div class="col-xl-6">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title mb-5">{{$title}} Number <span class="text-warning">#{{$saleId}}</span></h4>
+                        <h4 class="card-title mb-5">{{$title}} Number : <span class="text-danger">#{{$saleId}}</span></h4>
                         <x-forms.select label="Customer" name="customer_id"
                                         :options="$customers" :required=false></x-forms.select>
                     </div>
@@ -62,7 +62,9 @@
                                 <div class="col-lg-1">
                                     <div class="mb-3">
                                         <label>Stock</label>
-                                        <p class="form-control">{{$productAvailable[$key] ?? 0}}</p>
+                                        <p class="form-control @if(($productAvailable[$key] ?? 0) < \App\Utility\Utility::$minStockValue) text-danger @endif">
+                                            <strong>{{$productAvailable[$key] ?? 0}}</strong>
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="col-lg-2">
@@ -81,11 +83,13 @@
                                             <p class="form-control">{{$total[$key]}}</p>
                                         </div>
                                         <div class="col-2">
+                                            @if($key != 0)
                                              <span class="btn btn-danger mt-3 mt-lg-0" data-bs-toggle="tooltip"
                                                    data-bs-placement="top" title=""
                                                    data-bs-original-title="Delete" wire:click="removeRow({{$key}})">
-                                    <i class="fas fa-trash-alt"></i>
-                                </span>
+                                                    <i class="fas fa-trash-alt"></i>
+                                            </span>
+                                            @endif
                                         </div>
                                     </div>
 

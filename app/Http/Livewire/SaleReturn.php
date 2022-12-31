@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Customer;
 use App\Models\Product;
 use App\Treat\Repeater;
 use App\Treat\SaleReturnId;
@@ -19,6 +20,7 @@ class SaleReturn extends Component
     public array $productunit = [null];
     public array $productCategory = [null];
     public array $total = [0];
+    public $customer_id;
     public $finalTotal;
     public $totalQty;
     public $productAvailable;
@@ -36,9 +38,12 @@ class SaleReturn extends Component
 
         if (str_starts_with($name, 'product_id.')) {
             $nameKey = explode(".", $name);
-            $product = Product::find($value);
+            $product = Product::withSum('stock as total_in', 'product_in')
+                ->withSum('stock as total_out', 'product_out')
+                ->find($value);
             $this->productunit[$nameKey[1]] = $product->unit_name;
             $this->productCategory[$nameKey[1]] = $product->category->name;
+            $this->productAvailable[$nameKey[1]] = $product->total_in - $product->total_out;
         }
         if (str_starts_with($name, 'price.')) {
             $nameKey = explode(".", $name);
@@ -59,6 +64,7 @@ class SaleReturn extends Component
             DB::beginTransaction();
             $sale = \App\Models\SaleReturn::create([
                 'sale_return_num' => $this->SaleReturnId(),
+                'customer_id' => $this->customer_id,
                 'amount' =>  $this->finalTotal,
                 'created_by' => \Auth::user()->name,
             ]);
@@ -101,6 +107,7 @@ class SaleReturn extends Component
             'title' => 'Sale Return',
             'products' => Product::where('status', 1)->get(),
             'saleReturnId' => $this->SaleReturnId(),
+            'customers' => Customer::where('status', 1)->get(),
         ];
         return view('livewire.sale-return', $data);
     }

@@ -10,7 +10,7 @@ class SaleReturnDetailObservr
     /**
      * Handle the SaleReturnDetail "created" event.
      *
-     * @param  \App\Models\SaleReturnDetail  $saleReturnDetail
+     * @param \App\Models\SaleReturnDetail $saleReturnDetail
      * @return void
      */
     public function created(SaleReturnDetail $saleReturnDetail)
@@ -25,14 +25,14 @@ class SaleReturnDetailObservr
         $stock->lot_no = $saleReturnDetail->saleReturns->id;
         $stock->stocksable_id = $saleReturnDetail->id;
         $stock->stocksable_type = SaleReturnDetail::class;
-        $stock->created_by = Auth()->user()->name;
+        $stock->created_by = Auth()->user()->name ?? 'seeder';
         $stock->saveQuietly();
     }
 
     /**
      * Handle the SaleReturnDetail "updated" event.
      *
-     * @param  \App\Models\SaleReturnDetail  $saleReturnDetail
+     * @param \App\Models\SaleReturnDetail $saleReturnDetail
      * @return void
      */
     public function updated(SaleReturnDetail $saleReturnDetail)
@@ -43,7 +43,7 @@ class SaleReturnDetailObservr
     /**
      * Handle the SaleReturnDetail "deleted" event.
      *
-     * @param  \App\Models\SaleReturnDetail  $saleReturnDetail
+     * @param \App\Models\SaleReturnDetail $saleReturnDetail
      * @return void
      */
     public function deleted(SaleReturnDetail $saleReturnDetail)
@@ -54,7 +54,7 @@ class SaleReturnDetailObservr
     /**
      * Handle the SaleReturnDetail "restored" event.
      *
-     * @param  \App\Models\SaleReturnDetail  $saleReturnDetail
+     * @param \App\Models\SaleReturnDetail $saleReturnDetail
      * @return void
      */
     public function restored(SaleReturnDetail $saleReturnDetail)
@@ -65,7 +65,7 @@ class SaleReturnDetailObservr
     /**
      * Handle the SaleReturnDetail "force deleted" event.
      *
-     * @param  \App\Models\SaleReturnDetail  $saleReturnDetail
+     * @param \App\Models\SaleReturnDetail $saleReturnDetail
      * @return void
      */
     public function forceDeleted(SaleReturnDetail $saleReturnDetail)

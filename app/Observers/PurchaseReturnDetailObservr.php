@@ -25,7 +25,7 @@ class PurchaseReturnDetailObservr
         $stock->lot_no = $purchaseReturnDetail->purchaseReturn->id;
         $stock->stocksable_id = $purchaseReturnDetail->id;
         $stock->stocksable_type = PurchaseReturnDetail::class;
-        $stock->created_by = Auth()->user()->name;
+        $stock->created_by = Auth()->user()->name ?? 'seeder';
         $stock->saveQuietly();
     }
 

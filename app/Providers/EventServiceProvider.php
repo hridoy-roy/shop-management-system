@@ -4,16 +4,20 @@ namespace App\Providers;
 
 use App\Models\Purchase;
 use App\Models\PurchaseDetail;
+use App\Models\PurchaseReturn;
 use App\Models\PurchaseReturnDetail;
 use App\Models\Sale;
 use App\Models\SaleDetail;
+use App\Models\SaleReturn;
 use App\Models\SaleReturnDetail;
 use App\Observers\PurchaseDetailObserver;
 use App\Observers\PurchaseObserver;
 use App\Observers\PurchaseReturnDetailObservr;
+use App\Observers\PurchaseReturnObserver;
 use App\Observers\SaleDetailObserver;
 use App\Observers\SaleObserver;
 use App\Observers\SaleReturnDetailObservr;
+use App\Observers\SaleReturnObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -41,9 +45,11 @@ class EventServiceProvider extends ServiceProvider
     {
         PurchaseDetail::observe(PurchaseDetailObserver::class);
         Purchase::observe(PurchaseObserver::class);
+        PurchaseReturn::observe(PurchaseReturnObserver::class);
         PurchaseReturnDetail::observe(PurchaseReturnDetailObservr::class);
         SaleDetail::observe(SaleDetailObserver::class);
         Sale::observe(SaleObserver::class);
+        SaleReturn::observe(SaleReturnObserver::class);
         SaleReturnDetail::observe(SaleReturnDetailObservr::class);
     }
 

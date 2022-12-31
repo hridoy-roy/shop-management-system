@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\PurchaseReturn;
 use App\Http\Requests\StorePurchaseReturnRequest;
 use App\Http\Requests\UpdatePurchaseReturnRequest;
 use App\Models\PurchaseReturnDetail;
+use Illuminate\Database\Eloquent\Builder;
 
 class PurchaseReturnController extends Controller
 {
@@ -19,7 +21,14 @@ class PurchaseReturnController extends Controller
         $data = [
             'subTitle' => 'Purchase Return list',
             'title' => 'Purchase Return',
-            'purchaseReturns' => PurchaseReturnDetail::latest()->take(2000)->get(),
+            'from_date' => date('Y-m-01'),
+            'to_date' => date('Y-m-d'),
+            'product_id' => '',
+            'products' => Product::where('status', '1')->get(),
+            'purchaseReturns' => PurchaseReturnDetail::whereHas(
+                'purchaseReturn', function (Builder $q) {
+                $q->whereDate('date', '>=', date('Y-m-01'))->whereDate('date', '<=', date('Y-m-d'));
+            })->get(),
         ];
         return view('purchase-return.list', $data);
     }
@@ -46,7 +55,34 @@ class PurchaseReturnController extends Controller
      */
     public function store(StorePurchaseReturnRequest $request)
     {
-        //
+        if ($request->from_date && $request->to_date && $request->product_id) {
+            $purchaseReturns = PurchaseReturnDetail::whereHas(
+                'purchaseReturn', function (Builder $q) use ($request) {
+                $q->whereDate('date', '>=', $request->from_date)
+                    ->whereDate('date', '<=', $request->to_date);
+            })->where('product_id', $request->product_id)->get();
+        } elseif ($request->from_date && $request->to_date) {
+            $purchaseReturns = PurchaseReturnDetail::whereHas(
+                'purchaseReturn', function (Builder $q) use ($request) {
+                $q->whereDate('date', '>=', $request->from_date)
+                    ->whereDate('date', '<=', $request->to_date);
+            })->get();
+        } elseif ($request->product_id) {
+            $purchaseReturns = PurchaseReturnDetail::where('product_id', $request->product_id)->get();
+        } else {
+            $purchaseReturns = [];
+        }
+
+        $data = [
+            'subTitle' => 'Purchase Return list',
+            'title' => 'Purchase Return',
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'product_id' => $request->product_id,
+            'products' => Product::where('status', '1')->get(),
+            'purchaseReturns' => $purchaseReturns,
+        ];
+        return view('purchase-return.list', $data);
     }
 
     /**

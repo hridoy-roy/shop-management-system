@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('sale_returns', function (Blueprint $table) {
             $table->id();
             $table->string('sale_return_num')->unique();
+            $table->foreignIdFor(\App\Models\Customer::class)->nullable()->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->date('date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->decimal('amount',9,2);
             $table->enum('type',App\Utility\Utility::$type)->default('Cash');

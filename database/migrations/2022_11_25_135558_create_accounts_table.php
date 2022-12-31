@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('debit',9,2)->default(0);
             $table->decimal('credit',9,2)->default(0);
             $table->text('note')->nullable();
-            $table->integer('transaction_num');
+            $table->string('transaction_num');
             $table->string('transaction_name');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

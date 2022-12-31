@@ -44,7 +44,7 @@ class SaleDetailObserver
             $amount = $product->price * $saleDetail->qty;
             $account->leaser_name = Utility::$leaser['Stock'];
             $account->date = now();
-            $account->debit += $amount;
+            $account->credit += $amount;
             $account->transaction_num = $saleDetail->sale->sale_num;
             $account->transaction_name = Utility::$transaction['Sale'];
             $account->accountable_type = Sale::class;
@@ -57,7 +57,7 @@ class SaleDetailObserver
             $account = new Account();
             $account->leaser_name = Utility::$leaser['Stock'];
             $account->date = now();
-            $account->debit = $amount;
+            $account->credit = $amount;
             $account->transaction_num = $saleDetail->sale->sale_num;
             $account->transaction_name = Utility::$transaction['Sale'];
             $account->accountable_type = Sale::class;

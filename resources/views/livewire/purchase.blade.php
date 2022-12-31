@@ -56,14 +56,15 @@
                                     <div class="col-lg-1">
                                         <div class="mb-3">
                                             <label>Stock</label>
-                                            <p class="form-control">{{$availableStock[$key] ?? 0}}</p>
+                                            <p class="form-control @if(($productAvailable[$key] ?? 0) < \App\Utility\Utility::$minStockValue) text-danger @endif">
+                                                <strong>{{$productAvailable[$key] ?? 0}}</strong>
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="col-lg-2">
                                         <x-forms.input label="Price" type="number" name="price.{{$key}}"
                                                        placeholder="Price"></x-forms.input>
                                     </div>
-
                                     <div class="col-lg-2">
                                         <x-forms.input label="Quantity" type="number" name="quantity.{{$key}}"
                                                        placeholder="Quantity"></x-forms.input>
@@ -75,11 +76,14 @@
                                                 <p class="form-control">{{$total[$key]}}</p>
                                             </div>
                                             <div class="col-2">
-                                             <span class="btn btn-danger mt-3 mt-lg-0" data-bs-toggle="tooltip"
-                                                   data-bs-placement="top" title=""
-                                                   data-bs-original-title="Delete" wire:click="removeRow({{$key}})">
-                                    <i class="fas fa-trash-alt"></i>
-                                </span>
+                                                @if($key != 0)
+                                                    <span class="btn btn-danger mt-3 mt-lg-0" data-bs-toggle="tooltip"
+                                                          data-bs-placement="top" title=""
+                                                          data-bs-original-title="Delete"
+                                                          wire:click="removeRow({{$key}})">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </span>
+                                                @endif
                                             </div>
                                         </div>
 

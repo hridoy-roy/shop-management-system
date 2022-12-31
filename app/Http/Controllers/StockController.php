@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Stock;
 use App\Http\Requests\StoreStockRequest;
 use App\Http\Requests\UpdateStockRequest;
+use App\Utility\Utility;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -45,6 +46,7 @@ class StockController extends Controller
             'from_date' => date('Y-m-01'),
             'to_date' => date('Y-m-d'),
             'products' => Product::where('status', '1')->get(),
+            'types' => Utility::$transaction,
             'type' => '',
             'product_id' => '',
             'stocks' => Stock::whereDate('date', '>=', date('Y-m-01'))->whereDate('date', '<=', date('Y-m-d'))->get(),
@@ -60,18 +62,30 @@ class StockController extends Controller
      */
     public function store(StoreStockRequest $request)
     {
-        if ($request->from_date && $request->to_date && $request->product_id) {
-            $stocks = Stock::whereHas(
-                'purchase', function (Builder $q) use ($request) {
-                $q->whereDate('date', '>=', $request->from_date)->whereDate('date', '<=', $request->to_date);
-            })->where('product_id', $request->product_id)->get();
+        if ($request->from_date && $request->to_date && $request->product_id && $request->type) {
+            $stocks = Stock::whereDate('date', '>=', $request->from_date)
+                ->whereDate('date', '<=', $request->to_date)
+                ->where('product_id', $request->product_id)
+                ->where('tr_from', $request->type)
+                ->get();
+        } elseif ($request->from_date && $request->to_date && $request->product_id) {
+            $stocks = Stock::whereDate('date', '>=', $request->from_date)
+                ->whereDate('date', '<=', $request->to_date)
+                ->where('product_id', $request->product_id)
+                ->get();
+        } elseif ($request->from_date && $request->to_date && $request->type) {
+            $stocks = Stock::whereDate('date', '>=', $request->from_date)
+                ->whereDate('date', '<=', $request->to_date)
+                ->where('tr_from', $request->type)
+                ->get();
         } elseif ($request->from_date && $request->to_date) {
-            $stocks = $stocks = Stock::whereHas(
-                'purchase', function (Builder $q) use ($request) {
-                $q->whereDate('date', '>=', $request->from_date)->whereDate('date', '<=', $request->to_date);
-            })->get();
+            $stocks = $stocks = Stock::whereDate('date', '>=', $request->from_date)
+                ->whereDate('date', '<=', $request->to_date)
+                ->get();
         } elseif ($request->product_id) {
             $stocks = Stock::where('product_id', $request->product_id)->get();
+        } elseif ($request->type) {
+            $stocks = Stock::where('tr_from', $request->type)->get();
         } else {
             $stocks = [];
         }
@@ -82,6 +96,8 @@ class StockController extends Controller
             'from_date' => $request->from_date,
             'to_date' => $request->to_date,
             'product_id' => $request->product_id,
+            'type' => $request->type,
+            'types' => Utility::$transaction,
             'stocks' => $stocks,
             'products' => Product::where('status', '1')->get(),
         ];
@@ -131,5 +147,18 @@ class StockController extends Controller
     public function destroy(Stock $stock)
     {
         //
+    }
+
+    public function present(): Factory|View|Application
+    {
+        $data = [
+            'subTitle' => 'Stock list',
+            'title' => 'Stock',
+            'stocks' => Product::has('stock')
+                ->withSum('stock as total_in', 'product_in')
+                ->withSum('stock as total_out', 'product_out')
+                ->get(),
+        ];
+        return view('stock.present', $data);
     }
 }
