@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Opening;
 use App\Models\Purchase;
 use App\Models\PurchaseDetail;
 use App\Models\PurchaseReturn;
@@ -10,6 +11,7 @@ use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\SaleReturn;
 use App\Models\SaleReturnDetail;
+use App\Observers\OpeningObserver;
 use App\Observers\PurchaseDetailObserver;
 use App\Observers\PurchaseObserver;
 use App\Observers\PurchaseReturnDetailObservr;
@@ -51,6 +53,7 @@ class EventServiceProvider extends ServiceProvider
         Sale::observe(SaleObserver::class);
         SaleReturn::observe(SaleReturnObserver::class);
         SaleReturnDetail::observe(SaleReturnDetailObservr::class);
+        Opening::observe(OpeningObserver::class);
     }
 
     /**

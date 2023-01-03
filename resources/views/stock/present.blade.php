@@ -47,7 +47,7 @@
                                     <td>{{$stock->unit_name}}</td>
                                     <td>{{$stock->total_in}}</td>
                                     <td>{{$stock->total_out}}</td>
-                                    <td>{{$stock->total_in - $stock->total_out}}</td>
+                                    <td class="@if(($stock->total_in - $stock->total_out) < \App\Utility\Utility::$minStockValue) text-danger @endif">{{$stock->total_in - $stock->total_out}}</td>
                                 </tr>
                             @empty
                                 <tr class="text-center">

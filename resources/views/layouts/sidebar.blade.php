@@ -59,8 +59,7 @@
                         <span key="t-multi-level">Opening </span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Item Opening</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Cash Opening</a></li>
+                        <li><a href="{{route('opening.index')}}" key="t-level-1-1">Item / Cash Opening</a></li>
                         <li><a href="{{route('customer.index')}}">Customer</a></li>
                     </ul>
                 </li>

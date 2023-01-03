@@ -12,6 +12,8 @@ class Utility
     const KG = "kg";
     const LITER = "liter";
     const CASH = 'Cash';
+    const CASH_OPENING = 'Cash_Opening';
+    const ITEM_OPENING = 'Item_Opening';
     const HOLD = 'Hold';
     const STOCK = 'Stock';
     const SALE = 'Sale';
@@ -47,5 +49,10 @@ class Utility
         self::SALE_RETURN => self::SALE_RETURN,
         self::PURCHASE => self::PURCHASE,
         self::PURCHASE_RETURN => self::PURCHASE_RETURN,
+    ];
+
+    public static array $opening = [
+        self::CASH_OPENING => self::CASH_OPENING,
+        self::ITEM_OPENING => self::ITEM_OPENING,
     ];
 }

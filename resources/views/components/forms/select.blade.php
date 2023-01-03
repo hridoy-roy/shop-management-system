@@ -1,6 +1,6 @@
 <div class="mb-3">
     <label for="{{$name}}" class="form-label">{{$label}}</label>
-    <select id="{{$name}}"
+    <select id="{{$inputId}}"
             wire:model="{{$name}}"
             name="{{$name}}"
             {{ $required ? 'required' : ''}}

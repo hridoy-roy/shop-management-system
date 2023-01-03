@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\OpeningController;
 use App\Http\Controllers\ProductCategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -39,6 +40,7 @@ Route::middleware('auth')->group(callback: function () {
     Route::resources([
         'categories' => ProductCategoryController::class,
         'products' => ProductController::class,
+        'opening' => OpeningController::class,
         'purchases' => PurchaseController::class,
         'purchaseReturns' => PurchaseReturnController::class,
         'sales' => SaleController::class,
