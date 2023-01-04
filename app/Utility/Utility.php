@@ -16,6 +16,7 @@ class Utility
     const ITEM_OPENING = 'Item_Opening';
     const HOLD = 'Hold';
     const STOCK = 'Stock';
+    const DUE = 'Due';
     const SALE = 'Sale';
     const SALE_RETURN = 'Sale_Return';
     const PURCHASE = 'Purchase';
@@ -37,6 +38,7 @@ class Utility
     public static array $type = [
         self::CASH => self::CASH,
         self::HOLD => self::HOLD,
+        self::DUE => self::DUE,
     ];
 
     public static array $leaser = [

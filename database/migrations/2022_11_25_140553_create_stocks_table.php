@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('product_out')->default(0);
             $table->decimal('price',9,2);
             $table->decimal('amount',9,2);
-            $table->integer('tr_no');
+            $table->string('tr_no');
             $table->string('tr_from');
             $table->integer('lot_no')->nullable();
             $table->string('created_by')->nullable();

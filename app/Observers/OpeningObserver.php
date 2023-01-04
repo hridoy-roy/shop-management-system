@@ -29,6 +29,16 @@ class OpeningObserver
             $account->accountable_id = $opening->id;
             $account->saveQuietly();
         }elseif($opening->type === 'Item_Opening'){
+            $account = new Account();
+            $account->leaser_name = Utility::$leaser['Stock'];
+            $account->date = now();
+            $account->debit = $opening->price * $opening->qty;
+            $account->transaction_num = $opening->id;
+            $account->transaction_name = Utility::$opening['Item_Opening'];
+            $account->accountable_type = Opening::class;
+            $account->created_by = \Auth::user()->name ?? 'seeder';
+            $account->accountable_id = $opening->id;
+            $account->saveQuietly();
             $stock = new Stock();
             $stock->product_id = $opening->product_id;
             $stock->product_in = $opening->qty;

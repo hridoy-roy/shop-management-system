@@ -20,7 +20,7 @@ class PurchaseReturnDetailObservr
         $stock->product_out = $purchaseReturnDetail->qty;
         $stock->price = $purchaseReturnDetail->rate;
         $stock->amount = $purchaseReturnDetail->amount;
-        $stock->tr_no = $purchaseReturnDetail->purchaseReturn->id;
+        $stock->tr_no = $purchaseReturnDetail->purchaseReturn->purchase_return_num;
         $stock->tr_from = "SaleReturn";
         $stock->lot_no = $purchaseReturnDetail->purchaseReturn->id;
         $stock->stocksable_id = $purchaseReturnDetail->id;

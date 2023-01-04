@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\Customer;
 use App\Models\Product;
+use App\Models\SaleDetail;
 use App\Treat\Repeater;
 use App\Treat\SaleId;
 use Illuminate\Support\Facades\DB;
@@ -77,7 +78,7 @@ class Sale extends Component
                 'sale_num' => $this->SaleId(),
                 'customer_id' => $this->customer_id,
                 'amount' => $this->finalTotal,
-                'discount' => $this->discount,
+                'discount' => $this->discount ?? 0,
                 'type' => $this->type,
                 'created_by' => \Auth::user()->name,
             ]);
@@ -108,6 +109,12 @@ class Sale extends Component
                 'type' => $this->type,
                 'updated_by' => \Auth::user()->name,
             ]);
+            if ($this->sale->saleDetails){
+                foreach ($this->sale->saleDetails as $saleDetail){
+                    if($saleDetail->stock)
+                        $saleDetail->stock->delete();
+                }
+            }
             $this->sale->saleDetails()->delete();
             $this->sale->saleDetails()->createMany($this->saleDetails($this->validate()));
             DB::commit();

@@ -140,6 +140,12 @@ class SaleController extends Controller
      */
     public function destroy(Sale $sale): bool
     {
+        if ($sale->saleDetails){
+            foreach ($sale->saleDetails as $saleDetail){
+                if($saleDetail->stock)
+                    $saleDetail->stock->delete();
+            }
+        }
         return $sale->delete();
     }
 
@@ -153,10 +159,25 @@ class SaleController extends Controller
         return view('sale.hold-list', $data);
     }
 
+
     public function holdConfirm($id)
     {
         return  Sale::find($id)->update(['type' => 'Cash']);
     }
 
+    public function dueList()
+    {
+        $data = [
+            'subTitle' => 'Sale Due list',
+            'title' => 'Sale',
+            'sales' => Sale::where('type', 'Due')->latest()->take(2000)->get(),
+        ];
+        return view('sale.due-list', $data);
+    }
+
+    public function dueConfirm($id)
+    {
+        return  Sale::find($id)->update(['type' => 'Cash']);
+    }
 
 }

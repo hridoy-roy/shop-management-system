@@ -20,7 +20,7 @@ class SaleReturnDetailObservr
         $stock->product_in = $saleReturnDetail->qty;
         $stock->price = $saleReturnDetail->rate;
         $stock->amount = $saleReturnDetail->amount;
-        $stock->tr_no = $saleReturnDetail->saleReturns->id;
+        $stock->tr_no = $saleReturnDetail->saleReturns->sale_return_num;
         $stock->tr_from = "SaleReturn";
         $stock->lot_no = $saleReturnDetail->saleReturns->id;
         $stock->stocksable_id = $saleReturnDetail->id;

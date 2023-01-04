@@ -39,7 +39,8 @@ class SaleObserver
      */
     public function updated(Sale $sale)
     {
-        if ($sale->type != 'Hold') {
+//        if The sale is Hold Or Due, Account will not create
+        if ($sale->type != 'Hold' && $sale->type != 'Due') {
             $account = new Account();
             $account->leaser_name = Utility::$leaser['Cash'];
             $account->date = now();
@@ -47,8 +48,8 @@ class SaleObserver
             $account->transaction_num = $sale->sale_num;
             $account->transaction_name = Utility::$transaction['Sale'];
             $account->accountable_type = Sale::class;
-            $account->created_by = \Auth::user()->name ?? 'seeder';
             $account->accountable_id = $sale->id;
+            $account->created_by = \Auth::user()->name ?? 'seeder';
             $account->saveQuietly();
         }
     }

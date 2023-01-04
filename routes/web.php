@@ -52,6 +52,8 @@ Route::middleware('auth')->group(callback: function () {
     Route::get('stock/present/list', [StockController::class, 'present'])->name('stock.present.list');
     Route::get('sales/hold/list', [SaleController::class, 'holdList'])->name('sale.hold.list');
     Route::Post('sales/hold/confirm/{id}', [SaleController::class, 'holdConfirm'])->name('sale.hold.confirm');
+    Route::get('sales/due/list', [SaleController::class, 'dueList'])->name('sale.due.list');
+    Route::Post('sales/due/confirm/{id}', [SaleController::class, 'dueConfirm'])->name('sale.due.confirm');
 });
 
 require __DIR__ . '/auth.php';

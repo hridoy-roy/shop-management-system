@@ -11,6 +11,11 @@ class Stock extends Model
 {
     use HasFactory;
 
+    public function stocksable()
+    {
+        return $this->morphTo();
+    }
+
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);

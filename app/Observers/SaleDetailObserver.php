@@ -19,13 +19,14 @@ class SaleDetailObserver
      */
     public function created(SaleDetail $saleDetail)
     {
+        //        This is for Normal Hold Sale For Stock
         if ($saleDetail->sale->type != 'Hold') {
             $stock = new Stock();
             $stock->product_id = $saleDetail->product_id;
             $stock->product_out = $saleDetail->qty;
             $stock->price = $saleDetail->rate;
             $stock->amount = $saleDetail->amount;
-            $stock->tr_no = $saleDetail->sale->id;
+            $stock->tr_no = $saleDetail->sale->sale_num;
             $stock->tr_from = "Sale";
             $stock->lot_no = $saleDetail->sale->id;
             $stock->stocksable_id = $saleDetail->id;
@@ -33,6 +34,8 @@ class SaleDetailObserver
             $stock->created_by = Auth()->user()->name ?? 'seeder';
             $stock->saveQuietly();
         }
+
+        //        This is for Normal Sale For Account
         $account = Account::where([
             ['leaser_name', '=', Utility::$leaser['Stock']],
             ['transaction_num', '=', $saleDetail->sale->sale_num],
@@ -75,20 +78,7 @@ class SaleDetailObserver
      */
     public function updated(SaleDetail $saleDetail)
     {
-        if ($saleDetail->sale->type != 'Hold') {
-            $stock = new Stock();
-            $stock->product_id = $saleDetail->product_id;
-            $stock->product_out = $saleDetail->qty;
-            $stock->price = $saleDetail->rate;
-            $stock->amount = $saleDetail->amount;
-            $stock->tr_no = $saleDetail->sale->id;
-            $stock->tr_from = "Sale";
-            $stock->lot_no = $saleDetail->sale->id;
-            $stock->stocksable_id = $saleDetail->id;
-            $stock->stocksable_type = SaleDetail::class;
-            $stock->created_by = Auth()->user()->name ?? 'seeder';
-            $stock->saveQuietly();
-        }
+        //
     }
 
     /**
