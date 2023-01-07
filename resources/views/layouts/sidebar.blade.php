@@ -14,10 +14,11 @@
                         <span key="t-multi-level">Account</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Cash Withdraw</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Cash Withdraw Hold</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Balance Sheet</a></li>
-                        <li><a href="javascript: void(0);" key="t-level-1-1">Profit & Loss Reports</a></li>
+                        <li><a href="{{route('withdraw.create')}}" key="t-level-1-1">Cash Withdraw</a></li>
+                        <li><a href="{{route('withdraw.index')}}" key="t-level-1-1">Cash Withdraw Report</a></li>
+                        <li><a href="{{route('withdraw.hold.list')}}" key="t-level-1-1">Cash Withdraw Hold</a></li>
+                        <li><a href="{{route('balance.sheet')}}" key="t-level-1-1">Balance Sheet</a></li>
+                        <li><a href="{{route('profit.loss')}}" key="t-level-1-1">Profit & Loss Reports</a></li>
                     </ul>
                 </li>
                 <li>

@@ -1,23 +1,31 @@
 @extends('layouts.master')
-@section('title') {{$title}} @endsection
+@section('title')
+    {{$title}}
+@endsection
 
 @section('css')
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <!-- Sweet Alert-->
+    <link href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         .avatar-upload {
             position: relative;
             max-width: 205px;
             margin: 50px auto;
         }
+
         .avatar-upload .avatar-edit {
             position: absolute;
             right: 12px;
             z-index: 1;
             top: 10px;
         }
+
         .avatar-upload .avatar-edit input {
             display: none;
         }
+
         .avatar-upload .avatar-edit input + label {
             display: inline-block;
             width: 34px;
@@ -26,15 +34,17 @@
             border-radius: 100%;
             background: #FFFFFF;
             border: 1px solid transparent;
-            box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.12);
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.12);
             cursor: pointer;
             font-weight: normal;
             transition: all .2s ease-in-out;
         }
+
         .avatar-upload .avatar-edit input + label:hover {
             background: #f1f1f1;
             border-color: #d6d6d6;
         }
+
         .avatar-upload .avatar-edit input + label:after {
             content: "\f040";
             font-family: 'FontAwesome';
@@ -46,14 +56,16 @@
             text-align: center;
             margin: auto;
         }
+
         .avatar-upload .avatar-preview {
             width: 192px;
             height: 192px;
             position: relative;
             border-radius: 100%;
             border: 6px solid #F8F8F8;
-            box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.1);
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
         }
+
         .avatar-upload .avatar-preview > div {
             width: 100%;
             height: 100%;
@@ -68,8 +80,12 @@
 @section('content')
 
     @component('components.breadcrumb')
-        @slot('li_1')  {{$subTitle}} @endslot
-        @slot('title') {{$title}} @endslot
+        @slot('li_1')
+            {{$subTitle}}
+        @endslot
+        @slot('title')
+            {{$title}}
+        @endslot
     @endcomponent
 
     <div class="row">
@@ -90,21 +106,22 @@
                                 <button type="button"
                                         class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
                                         data-bs-toggle="modal" data-bs-target=".customer-modal-xl"><i
-                                        class="mdi mdi-plus me-1"></i> New Customers</button>
+                                        class="mdi mdi-plus me-1"></i> New Customers
+                                </button>
                             </div>
                         </div><!-- end col-->
                     </div>
 
                     <div class="table-responsive">
-                        <table class="table align-middle table-nowrap">
+                        <table class="table align-middle table-nowrap text-center">
                             <thead>
                             <tr>
                                 <th>SL</th>
                                 <th>Name</th>
+                                <th>Shop Name</th>
                                 <th>Phone / Email</th>
                                 <th>Address</th>
-                                <th>Rating</th>
-                                <th>Total Sale</th>
+                                <th>Reference</th>
                                 <th>Joining Date</th>
                                 <th>Action</th>
                             </tr>
@@ -112,40 +129,47 @@
                             <tbody>
                             @forelse($customers as $customer)
 
-                            <tr>
-                                <td>{{++$loop->index}}</td>
-                                <td>{{$customer->name}} <span class="badge rounded-pill bg-success float-end" key="t-new">New</span></td>
-                                <td>
-                                    <p class="mb-1">{{$customer->phone ?? 'N/A'}} /</p>
-                                    <p class="mb-0">{{$customer->email ?? 'N/A'}}</p>
-                                </td>
+                                <tr>
+                                    <td>{{++$loop->index}}</td>
+                                    <td>{{$customer->name}}
+                                        @php
+                                        $jd = \Illuminate\Support\Carbon::create($customer->joining_date);
+                                        @endphp
+                                        @if($jd->diffInDays(now('Asia/Dhaka')) < $utility::$newStatusDayValue)
+                                        <span class="badge rounded-pill bg-success float-end"  key="t-new">New</span>
+                                        @endif
+                                    </td>
+                                    <td>{{$customer->shop_name ?? 'N/A'}}</td>
+                                    <td>
+                                        <p class="mb-1">{{$customer->phone ?? 'N/A'}} /</p>
+                                        <p class="mb-0">{{$customer->email ?? 'N/A'}}</p>
+                                    </td>
 
-                                <td>{{$customer->address ?? 'N/A'}}</td>
-                                <td><span class="badge bg-success font-size-12"><i class="mdi mdi-star me-1"></i>
-                                            4.2</span></td>
-                                <td>$5,412</td>
-                                <td>{{$customer->joining_date}}</td>
-                                <td>
-                                    <div class="dropdown">
-                                        <a href="#" class="dropdown-toggle card-drop" data-bs-toggle="dropdown"
-                                           aria-expanded="false">
-                                            <i class="mdi mdi-dots-horizontal font-size-18"></i>
-                                        </a>
-                                        <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a href="#" class="dropdown-item"><i
-                                                        class="mdi mdi-pencil font-size-16 text-success me-1"></i>
-                                                    Edit</a></li>
-                                            <li><a href="#" class="dropdown-item"><i
-                                                        class="mdi mdi-trash-can font-size-16 text-danger me-1"></i>
-                                                    Delete</a></li>
-                                        </ul>
-                                    </div>
-                                </td>
-                            </tr>
+                                    <td>{{$customer->address ?? 'N/A'}}</td>
+                                    <td>{{$customer->reference->name ?? 'N/A'}}</td>
+                                    <td>{{$customer->joining_date}} / {{$jd->diffForHumans(['parts' => 2,'short' => true])}}</td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <a href="#" class="dropdown-toggle card-drop" data-bs-toggle="dropdown"
+                                               aria-expanded="false">
+                                                <i class="mdi mdi-dots-horizontal font-size-18"></i>
+                                            </a>
+                                            <ul class="dropdown-menu dropdown-menu-end">
+                                                <li><a href="{{route('customer.edit',$customer->id)}}"
+                                                       class="dropdown-item"><i
+                                                            class="mdi mdi-pencil font-size-16 text-success me-1"></i>
+                                                        Edit</a></li>
+                                                <li><a href="#" class="dropdown-item" onclick="customerDelete({{$customer->id}})" ><i
+                                                            class="mdi mdi-trash-can font-size-16 text-danger me-1"></i>
+                                                        Delete</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
                             @empty
                                 <tr>
                                     <td>
-                                    <strong>No Data</strong>
+                                        <strong>No Data</strong>
                                     </td>
                                 </tr>
                             @endforelse
@@ -185,11 +209,27 @@
                 </div>
                 <div class="modal-body">
                     <form action="{{route('customer.store')}}" method="Post" enctype="multipart/form-data">
-                       @csrf
-                        <x-forms.input label="Full Name" type="text" name="name"
-                                       placeholder="Full Name"></x-forms.input>
-                        <x-forms.textarea label="Customer Address" type="text" name="address" :required=false
-                                          placeholder="Customer Address"></x-forms.textarea>
+                        @csrf
+                        <div class="row">
+                            <div class="col-md-6">
+                                <x-forms.input label="Full Name" type="text" name="name"
+                                               placeholder="Full Name"></x-forms.input>
+                            </div>
+                            <div class="col-md-6">
+                                <x-forms.select label="Reference" name="customer_id" :required="false"
+                                                :options="$customers"></x-forms.select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <x-forms.input-date label="Joining Date" name="joining_date" :required="false"
+                                                    value="{{now('Asia/Dhaka')}}"></x-forms.input-date>
+                            </div>
+                            <div class="col-md-6">
+                                <x-forms.input label="Shop Name" type="text" name="shop_name" :required="false"
+                                               placeholder="Shop Name"></x-forms.input>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-md-6">
                                 <x-forms.input label="Phone Number" type=number name="phone"
@@ -203,25 +243,27 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <x-forms.input-date label="Joining Date" name="joining_date" :required="false" value="{{now()}}"></x-forms.input-date>
+                                <x-forms.textarea label="Customer Address" type="text" name="address" :required=false
+                                                  placeholder="Customer Address"></x-forms.textarea>
                             </div>
                             <div class="col-md-6">
                                 <level class="text-center">Customer Image</level>
                                 <div class="avatar-upload">
                                     <div class="avatar-edit">
-                                        <input type='file' name="avatar" id="imageUpload" accept=".png, .jpg, .jpeg" />
+                                        <input type='file' name="avatar" id="imageUpload" accept=".png, .jpg, .jpeg"/>
                                         <label for="imageUpload"></label>
                                     </div>
                                     <div class="avatar-preview">
-                                        <div id="imagePreview" style="background-image: url(http://i.pravatar.cc/500?img=7);">
+                                        <div id="imagePreview"
+                                             style="background-image: url(http://i.pravatar.cc/500);">
                                         </div>
                                     </div>
                                 </div>
-                                    @error('avatar')
-                                    <div class="is-invalid">
-                                        {{$message}}
-                                    </div>
-                                    @enderror
+                                @error('avatar')
+                                <div class="is-invalid">
+                                    {{$message}}
+                                </div>
+                                @enderror
                             </div>
                         </div>
                         <div class="text-center">
@@ -239,16 +281,67 @@
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-                reader.onload = function(e) {
-                    $('#imagePreview').css('background-image', 'url('+e.target.result +')');
+                reader.onload = function (e) {
+                    $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
                     $('#imagePreview').hide();
                     $('#imagePreview').fadeIn(650);
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
-        $("#imageUpload").change(function() {
+
+        $("#imageUpload").change(function () {
             readURL(this);
         });
+    </script>
+    <!-- Sweet Alerts js -->
+    <script src="{{ asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
+
+    <!-- Sweet alert init js-->
+    <script src="{{ asset('assets/js/pages/sweet-alerts.init.js') }}"></script>
+@endsection
+
+@section('script-bottom')
+    <script>
+        function customerDelete(Id) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: !0,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                confirmButtonClass: "btn btn-success mt-2",
+                cancelButtonClass: "btn btn-danger ms-2 mt-2",
+                buttonsStyling: !1
+            }).then(function (t) {
+                t.value ?  $.ajax({
+                    url: "{{ url('customer') }}" + "/" + Id,
+                    type: "delete",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    success: function (response) {
+                        Swal.fire({
+                            title: "Deleted!",
+                            text: "Customer Info has been deleted.",
+                            icon: "success",
+                        });
+                        setTimeout(location.reload.bind(location), 2000);
+                    },
+                    error: function (response) {
+                        Swal.fire({
+                            title: "Fail",
+                            text: "Customer Delete Fail",
+                            icon: "error"
+                        });
+                    }
+                }): t.dismiss === Swal.DismissReason.cancel && Swal.fire({
+                    title: "Cancelled",
+                    text: "Customer Delete Cancelled",
+                    icon: "error"
+                });
+            });
+        }
     </script>
 @endsection

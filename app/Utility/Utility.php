@@ -6,6 +6,8 @@ use phpDocumentor\Reflection\Types\Integer;
 
 class Utility
 {
+    public static int $minStockValue = 5;
+    public static int $newStatusDayValue = 10;
     const ACTIVE = "Active";
     const INACTIVE = "In Active";
     const PES = "Pes";
@@ -21,7 +23,8 @@ class Utility
     const SALE_RETURN = 'Sale_Return';
     const PURCHASE = 'Purchase';
     const PURCHASE_RETURN = 'Purchase_Return';
-    public static int $minStockValue= 5;
+    const WITHDRAW = 'Withdraw';
+    const WITHDRAW_HOLD = 'Withdraw_Hold';
 
 
     public static array $status = [
@@ -44,6 +47,7 @@ class Utility
     public static array $leaser = [
         self::CASH => self::CASH,
         self::STOCK => self::STOCK,
+        self::WITHDRAW => self::WITHDRAW,
     ];
 
     public static array $transaction = [
@@ -56,5 +60,10 @@ class Utility
     public static array $opening = [
         self::CASH_OPENING => self::CASH_OPENING,
         self::ITEM_OPENING => self::ITEM_OPENING,
+    ];
+
+    public static array $withdraw = [
+        self::WITHDRAW => self::WITHDRAW,
+        self::WITHDRAW_HOLD => self::WITHDRAW_HOLD,
     ];
 }

@@ -13,18 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('accounts', function (Blueprint $table) {
+        Schema::create('withdraws', function (Blueprint $table) {
             $table->id();
-            $table->enum('leaser_name',[\App\Utility\Utility::$leaser]);
+            $table->string('withdraw_num')->unique();
+            $table->enum('type',\App\Utility\Utility::$withdraw);
             $table->date('date')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->decimal('debit',9,2)->default(0);
-            $table->decimal('credit',9,2)->default(0);
+            $table->decimal('amount',9,2);
             $table->text('note')->nullable();
-            $table->string('transaction_num');
-            $table->string('transaction_name');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
-            $table->morphs('accountable');
             $table->timestamps();
         });
     }
@@ -36,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('accounts');
+        Schema::dropIfExists('withdraws');
     }
 };

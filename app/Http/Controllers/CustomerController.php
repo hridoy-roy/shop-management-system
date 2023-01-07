@@ -21,7 +21,6 @@ class CustomerController extends Controller
         $data = [
             'subTitle' => 'Customer list',
             'title' => 'Customer',
-//            'customers' => Customer::where('status','1')->get(),
             'customers' => Customer::latest()->take(200)->get(),
         ];
         return view('customer.index', $data);
@@ -66,11 +65,17 @@ class CustomerController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
-    public function edit(Customer $customer)
+    public function edit(Customer $customer): View|Factory|Application
     {
-        //
+        $data = [
+            'subTitle' => 'Customer Edit',
+            'title' => 'Customer',
+            'customers' => Customer::latest()->take(200)->get(),
+            'customer' => $customer
+        ];
+        return view('customer.edit', $data);
     }
 
     /**
@@ -78,21 +83,23 @@ class CustomerController extends Controller
      *
      * @param  \App\Http\Requests\UpdateCustomerRequest  $request
      * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(UpdateCustomerRequest $request, Customer $customer)
+    public function update(StoreCustomerRequest $request, Customer $customer): \Illuminate\Http\RedirectResponse
     {
-        //
+        Customer::create(array_merge($request->validated(), ['updated_by' => \Auth::user()->name]));
+        toastr()->success('Data has been Updated successfully!');
+        return redirect()->route('customer.index');
     }
 
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Customer  $customer
-     * @return \Illuminate\Http\Response
+     * @return bool
      */
-    public function destroy(Customer $customer)
+    public function destroy(Customer $customer): bool
     {
-        //
+        return $customer->delete();
     }
 }

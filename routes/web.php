@@ -11,6 +11,7 @@ use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaleReturnController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,12 +49,17 @@ Route::middleware('auth')->group(callback: function () {
         'stock' => StockController::class,
         'customer' => CustomerController::class,
         'accounts' => AccountController::class,
+        'withdraw' => WithdrawController::class
     ]);
     Route::get('stock/present/list', [StockController::class, 'present'])->name('stock.present.list');
     Route::get('sales/hold/list', [SaleController::class, 'holdList'])->name('sale.hold.list');
     Route::Post('sales/hold/confirm/{id}', [SaleController::class, 'holdConfirm'])->name('sale.hold.confirm');
     Route::get('sales/due/list', [SaleController::class, 'dueList'])->name('sale.due.list');
     Route::Post('sales/due/confirm/{id}', [SaleController::class, 'dueConfirm'])->name('sale.due.confirm');
+    Route::get('withdraw/hold/list', [WithdrawController::class, 'holdList'])->name('withdraw.hold.list');
+    Route::Post('withdraw/hold/confirm/{id}', [WithdrawController::class, 'holdConfirm'])->name('withdraw.hold.confirm');
+    Route::get('balance-sheet',[AccountController::class,'balanceSheet'])->name('balance.sheet');
+    Route::get('profit-loss',[AccountController::class,'profitLoss'])->name('profit.loss');
 });
 
 require __DIR__ . '/auth.php';

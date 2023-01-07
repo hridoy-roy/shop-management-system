@@ -11,6 +11,7 @@ use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\SaleReturn;
 use App\Models\SaleReturnDetail;
+use App\Models\Withdraw;
 use App\Observers\OpeningObserver;
 use App\Observers\PurchaseDetailObserver;
 use App\Observers\PurchaseObserver;
@@ -20,6 +21,7 @@ use App\Observers\SaleDetailObserver;
 use App\Observers\SaleObserver;
 use App\Observers\SaleReturnDetailObservr;
 use App\Observers\SaleReturnObserver;
+use App\Observers\WithdrawObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -54,6 +56,7 @@ class EventServiceProvider extends ServiceProvider
         SaleReturn::observe(SaleReturnObserver::class);
         SaleReturnDetail::observe(SaleReturnDetailObservr::class);
         Opening::observe(OpeningObserver::class);
+        Withdraw::observe(WithdrawObserver::class);
     }
 
     /**

@@ -7,6 +7,9 @@ use App\Models\Sale;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
 use App\Models\SaleDetail;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use phpDocumentor\Reflection\Types\True_;
 
@@ -15,7 +18,7 @@ class SaleController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -149,7 +152,7 @@ class SaleController extends Controller
         return $sale->delete();
     }
 
-    public function holdList()
+    public function holdList(): Factory|View|Application
     {
         $data = [
             'subTitle' => 'Sale Hold list',
@@ -165,7 +168,7 @@ class SaleController extends Controller
         return  Sale::find($id)->update(['type' => 'Cash']);
     }
 
-    public function dueList()
+    public function dueList(): Factory|View|Application
     {
         $data = [
             'subTitle' => 'Sale Due list',

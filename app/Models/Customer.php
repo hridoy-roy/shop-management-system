@@ -10,4 +10,9 @@ class Customer extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function reference()
+    {
+        return $this->belongsTo(Customer::class,'customer_id','id');
+    }
 }

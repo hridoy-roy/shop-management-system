@@ -15,12 +15,14 @@ return new class extends Migration
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(\App\Models\Customer::class)->nullable()->constrained()->cascadeOnUpdate();
             $table->string('name');
-            $table->string('address')->nullable();
             $table->date('joining_date')->nullable()->default(now());
+            $table->string('shop_name')->nullable();
             $table->string('rating')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
+            $table->string('address')->nullable();
             $table->binary('avatar')->nullable();
             $table->boolean('status')->default(true);
             $table->string('created_by')->nullable();
