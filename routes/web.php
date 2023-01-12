@@ -10,6 +10,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PurchaseReturnController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaleReturnController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +31,11 @@ Route::get('/', function () {
 })->name('root');
 
 Route::get('/dashboard', function () {
-    return view('index');
+    $data = [
+        'subTitle' => 'User Dashboard',
+        'title' => 'Dashboard',
+    ];
+    return view('dashboard', $data);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(callback: function () {
@@ -49,7 +54,8 @@ Route::middleware('auth')->group(callback: function () {
         'stock' => StockController::class,
         'customer' => CustomerController::class,
         'accounts' => AccountController::class,
-        'withdraw' => WithdrawController::class
+        'withdraw' => WithdrawController::class,
+        'settings' => SettingController::class,
     ]);
     Route::get('stock/present/list', [StockController::class, 'present'])->name('stock.present.list');
     Route::get('sales/hold/list', [SaleController::class, 'holdList'])->name('sale.hold.list');
@@ -58,8 +64,8 @@ Route::middleware('auth')->group(callback: function () {
     Route::Post('sales/due/confirm/{id}', [SaleController::class, 'dueConfirm'])->name('sale.due.confirm');
     Route::get('withdraw/hold/list', [WithdrawController::class, 'holdList'])->name('withdraw.hold.list');
     Route::Post('withdraw/hold/confirm/{id}', [WithdrawController::class, 'holdConfirm'])->name('withdraw.hold.confirm');
-    Route::get('balance-sheet',[AccountController::class,'balanceSheet'])->name('balance.sheet');
-    Route::get('profit-loss',[AccountController::class,'profitLoss'])->name('profit.loss');
+    Route::get('balance-sheet', [AccountController::class, 'balanceSheet'])->name('balance.sheet');
+    Route::get('profit-loss', [AccountController::class, 'profitLoss'])->name('profit.loss');
 });
 
 require __DIR__ . '/auth.php';
