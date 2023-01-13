@@ -2,11 +2,14 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Customer;
 use App\Models\Product;
+use App\Models\SaleDetail;
 use App\Treat\Repeater;
 use App\Treat\SaleId;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use phpDocumentor\Reflection\Types\Integer;
 
 class Sale extends Component
 {
@@ -21,12 +24,17 @@ class Sale extends Component
     public array $total = [0];
     public $finalTotal;
     public $totalQty;
+    public $customer_id;
+    public $discount;
+    public $type;
+    public $saleId;
+    public $sale;
     public $productAvailable;
 
     protected $rules = [
         'product_id.*' => 'required',
-        'price.*' => 'required|integer',
-        'quantity.*' => 'required',
+        'price.*' => 'required|regex:/^\d+(\.\d{1,2})?$/',
+        'quantity.*' => 'required|integer',
     ];
 
 
@@ -36,9 +44,12 @@ class Sale extends Component
 
         if (str_starts_with($name, 'product_id.')) {
             $nameKey = explode(".", $name);
-            $product = Product::find($value);
+            $product = Product::withSum('stock as total_in', 'product_in')
+                ->withSum('stock as total_out', 'product_out')
+                ->find($value);
             $this->productunit[$nameKey[1]] = $product->unit_name;
             $this->productCategory[$nameKey[1]] = $product->category->name;
+            $this->productAvailable[$nameKey[1]] = $product->total_in - $product->total_out;
         }
         if (str_starts_with($name, 'price.')) {
             $nameKey = explode(".", $name);
@@ -48,8 +59,14 @@ class Sale extends Component
         if (str_starts_with($name, 'quantity.')) {
             $nameKey = explode(".", $name);
             $this->total[$nameKey[1]] = $this->singlePrice * $value;
-            $this->finalTotal = array_sum($this->total);
+            $this->finalTotal = array_sum($this->total) - $this->discount;
             $this->totalQty = array_sum($this->quantity);
+        }
+        if ($name == 'discount') {
+            $this->finalTotal = (array_sum($this->total) ?? 0) - (is_numeric($this->discount) ? $this->discount : 0);
+            if (isset($this->quantity)) {
+                $this->totalQty = array_sum($this->quantity) ?? 0;
+            }
         }
     }
 
@@ -59,11 +76,16 @@ class Sale extends Component
             DB::beginTransaction();
             $sale = \App\Models\Sale::create([
                 'sale_num' => $this->SaleId(),
+                'customer_id' => $this->customer_id,
+                'amount' => $this->finalTotal,
+                'discount' => $this->discount ?? 0,
+                'type' => $this->type,
                 'created_by' => \Auth::user()->name,
             ]);
             $sale->saleDetails()->createMany($this->saleDetails($this->validate()));
             DB::commit();
             $this->reset();
+            $this->saleId = $this->saleId();
         } catch (Throwable $e) {
             DB::rollBack();
             report($e);
@@ -72,6 +94,40 @@ class Sale extends Component
             return redirect()->back();
         }
         toastr()->success('Data has been saved successfully!');
+        return redirect()->back();
+    }
+
+    public function update()
+    {
+        try {
+            DB::beginTransaction();
+            $this->sale->update([
+                'sale_num' => $this->saleId,
+                'customer_id' => $this->customer_id,
+                'amount' => $this->finalTotal,
+                'discount' => $this->discount,
+                'type' => $this->type,
+                'updated_by' => \Auth::user()->name,
+            ]);
+            if ($this->sale->saleDetails){
+                foreach ($this->sale->saleDetails as $saleDetail){
+                    if($saleDetail->stock)
+                        $saleDetail->stock->delete();
+                }
+            }
+            $this->sale->saleDetails()->delete();
+            $this->sale->saleDetails()->createMany($this->saleDetails($this->validate()));
+            DB::commit();
+            $this->reset();
+            $this->redirectRoute('sales.index');
+        } catch (Throwable $e) {
+            DB::rollBack();
+            report($e);
+            toastr()->error('Data Not Updated successfully!');
+            $this->reset();
+            return redirect()->back();
+        }
+        toastr()->success('Data has been Updated successfully!');
         return redirect()->back();
     }
 
@@ -93,13 +149,40 @@ class Sale extends Component
 
         return $purchaseDetails ?? [];
     }
+
+    public function mount()
+    {
+        if ($this->sale) {
+            $this->customer_id = $this->sale->customer_id;
+            $this->saleId = $this->sale->sale_num;
+            $this->finalTotal = $this->sale->amount;
+            $this->discount = $this->sale->discount;
+            $this->type = 'Cash';
+            foreach ($this->sale->saleDetails as $key => $saleDetail) {
+                $this->product_id[$key] = $saleDetail->product_id;
+                $this->productunit[$key] = $saleDetail->product->unit_name;
+                $this->price[$key] = $saleDetail->rate;
+                $this->totalQty += $saleDetail->qty;
+                $this->quantity[$key] = $saleDetail->qty;
+                $this->total[$key] = $saleDetail->amount;
+                $this->repeater[$key] = +1;
+                $product = Product::withSum('stock as total_in', 'product_in')
+                    ->withSum('stock as total_out', 'product_out')
+                    ->find($saleDetail->product_id);
+                $this->productAvailable[$key] = $product->total_in - $product->total_out;
+            }
+        } else {
+            $this->saleId = $this->saleId();
+        }
+    }
+
     public function render()
     {
         $data = [
             'subTitle' => 'Sale Info',
-            'title' => 'Purchase',
+            'title' => 'Sale',
             'products' => Product::where('status', 1)->get(),
-            'saleId' => $this->saleId(),
+            'customers' => Customer::where('status', 1)->get(),
         ];
         return view('livewire.sale', $data);
     }

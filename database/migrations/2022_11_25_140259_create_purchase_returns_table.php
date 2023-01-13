@@ -15,14 +15,10 @@ return new class extends Migration
     {
         Schema::create('purchase_returns', function (Blueprint $table) {
             $table->id();
-            $table->integer('purchase_num')->unique();
-            $table->date('date')->default(now());
-            $table->foreignIdFor(\App\Models\Product::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
-            $table->decimal('rate',9,2);
-            $table->integer('qty');
+            $table->string('purchase_return_num')->unique();
+            $table->date('date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->decimal('amount',9,2);
-            $table->string('unit_name')->nullable();
-            $table->enum('type',['CHECKED','MANUAL','COMPLETED'])->default('MANUAL');
+            $table->enum('type',App\Utility\Utility::$type)->default('Cash');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();

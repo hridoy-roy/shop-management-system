@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Customer;
+use App\Utility\Utility;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,11 @@ class SaleReturnFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'sale_return_num' => fake()->numberBetween(),
+            'date' => fake()->dateTimeBetween('-2 month','+2 month'),
+            'amount' => fake()->numberBetween(100,300),
+            'type' => fake()->randomElement(Utility::$type),
+            'created_by' => 'Admin Seeder'
         ];
     }
 }

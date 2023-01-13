@@ -17,17 +17,21 @@ class PurchaseDetailObserver
      */
     public function created(PurchaseDetail $purchaseDetail)
     {
+        $product = Product::find($purchaseDetail->product_id);
+        $product->price = $purchaseDetail->rate;
+        $product->saveQuietly();
+
         $stock = new Stock();
         $stock->product_id = $purchaseDetail->product_id;
         $stock->product_in = $purchaseDetail->qty;
         $stock->price = $purchaseDetail->rate;
         $stock->amount = $purchaseDetail->amount;
-        $stock->tr_no = $purchaseDetail->purchase->id;
+        $stock->tr_no = $purchaseDetail->purchase->purchase_num;
         $stock->tr_from = "Purchase";
         $stock->lot_no = $purchaseDetail->purchase->id;
         $stock->stocksable_id = $purchaseDetail->id;
         $stock->stocksable_type = PurchaseDetail::class;
-        $stock->created_by = Auth()->user()->name;
+        $stock->created_by = Auth()->user()->name ?? 'seed';
         $stock->saveQuietly();
     }
 

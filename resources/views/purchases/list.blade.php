@@ -1,13 +1,23 @@
 @extends('layouts.master')
-@section('title') {{$title}} @endsection
+@section('title')
+    {{$title}}
+@endsection
 @section('css')
     <!-- DataTables -->
-    <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/datatables/datatables.min.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('assets/libs/select2/select2.min.css') }}" rel="stylesheet" type="text/css"/>
+    <!-- form BT DataPicker -->
+    <link href="{{ asset('assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" rel="stylesheet"
+          type="text/css">
 @endsection
 @section('content')
     @component('components.breadcrumb')
-        @slot('li_1')  {{$subTitle}} @endslot
-        @slot('title') {{$title}} @endslot
+        @slot('li_1')
+            {{$subTitle}}
+        @endslot
+        @slot('title')
+            {{$title}}
+        @endslot
     @endcomponent
 
     <div class="row">
@@ -18,9 +28,10 @@
                     <p class="card-title-desc">
                         {{$subTitle}}
                     </p>
+                    @include('layouts.report-form', ['path' => 'purchases.store'])
                     <div class="table-responsive">
                         <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
-                        <thead>
+                            <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Purchase Num</th>
@@ -62,14 +73,14 @@
         </div>
     </div>
     <!-- end row -->
-
-{{--@dd($purchases);--}}
-@endsection
+@endSection
 @section('script')
     <!-- Required datatable js -->
+    <script src="{{ asset('assets/libs/select2/select2.min.js') }}"></script>
     <script src="{{ asset('assets/libs/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/libs/jszip/jszip.min.js') }}"></script>
     <script src="{{ asset('assets/libs/pdfmake/pdfmake.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
     <!-- Datatable init js -->
     <script src="{{ asset('assets/js/pages/datatables.init.js') }}"></script>
 @endsection

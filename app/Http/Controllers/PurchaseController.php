@@ -12,11 +12,13 @@ use App\Treat\PurchaseId;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
 
 class PurchaseController extends Controller
 {
 
     use PurchaseId;
+
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +29,15 @@ class PurchaseController extends Controller
         $data = [
             'subTitle' => 'Purchase list',
             'title' => 'Purchase',
-            'purchases' => PurchaseDetail::latest()->take(2000)->get(),
+            'from_date' => date('Y-m-01'),
+            'to_date' => date('Y-m-d'),
+            'product_id' => '',
+            'products' => Product::where('status', '1')->get(),
+            'purchases' => PurchaseDetail::whereHas(
+                'purchase', function (Builder $q) {
+                $q->whereDate('date', '>=', date('Y-m-01'))
+                    ->whereDate('date', '<=', date('Y-m-d'));
+            })->get(),
         ];
         return view('purchases.list', $data);
     }
@@ -35,14 +45,13 @@ class PurchaseController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
-    public function create()
+    public function create(): Application|Factory|View
     {
         $data = [
             'subTitle' => 'Purchase',
             'title' => 'Purchase',
-            'purchaseId' => $this->purchaseId(),
         ];
         return view('purchases.index', $data);
     }
@@ -55,7 +64,32 @@ class PurchaseController extends Controller
      */
     public function store(StorePurchaseRequest $request)
     {
-        //
+        if ($request->from_date && $request->to_date && $request->product_id) {
+            $purchase = PurchaseDetail::whereHas(
+                'purchase', function (Builder $q) use ($request) {
+                $q->whereDate('date', '>=', $request->from_date)->whereDate('date', '<=', $request->to_date);
+            })->where('product_id', $request->product_id)->get();
+        } elseif ($request->from_date && $request->to_date) {
+            $purchase = PurchaseDetail::whereHas(
+                'purchase', function (Builder $q) use ($request) {
+                $q->whereDate('date', '>=', $request->from_date)->whereDate('date', '<=', $request->to_date);
+            })->get();
+        } elseif ($request->product_id) {
+            $purchase = PurchaseDetail::where('product_id', $request->product_id)->get();
+        } else {
+            $purchase = [];
+        }
+
+        $data = [
+            'subTitle' => 'Purchase list',
+            'title' => 'Purchase',
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'product_id' => $request->product_id,
+            'products' => Product::where('status', '1')->get(),
+            'purchases' => $purchase,
+        ];
+        return view('purchases.list', $data);
     }
 
     /**

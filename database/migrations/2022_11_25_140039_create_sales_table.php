@@ -15,9 +15,12 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(\App\Models\Customer::class)->nullable()->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->string('sale_num')->unique();
-            $table->date('date')->default(now());
-            $table->enum('type',['CHECKED'])->default('CHECKED');
+            $table->date('date')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->decimal('amount',9,2);
+            $table->decimal('discount',9,2)->default(0);
+            $table->enum('type',App\Utility\Utility::$type)->default('Cash');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->timestamps();

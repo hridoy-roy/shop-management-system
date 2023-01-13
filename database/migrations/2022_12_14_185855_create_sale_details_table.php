@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sale_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(\App\Models\Sale::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
+            $table->foreignIdFor(\App\Models\Sale::class)->constrained()->cascadeOnUpdate()->cascadeOnDelete();
             $table->foreignIdFor(\App\Models\Product::class)->constrained()->cascadeOnUpdate()->restrictOnDelete();
             $table->decimal('rate',9,2);
             $table->integer('qty');

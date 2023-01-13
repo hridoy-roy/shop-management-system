@@ -13,15 +13,16 @@ class Select extends Component
     public string $required;
     public string $targetColumn;
     public mixed $options;
-    //    public $inputId;
+    public string $inputId;
     //    public $inputClass;
+
     /**
      * Create a new component instance.
      *
      * @return void
      */
 
-    public function __construct($label, $name, $options, $required = true, $targetColumn = 'name',$value='')
+    public function __construct($label, $name, $options,$inputId='', $required = true, $targetColumn = 'name', $value = '')
     {
         $this->label = $label;
         $this->name = $name;
@@ -29,6 +30,7 @@ class Select extends Component
         $this->value = old($name, $value);
         $this->required = $required;
         $this->targetColumn = $targetColumn;
+        $this->inputId = $inputId;
     }
 
     /**

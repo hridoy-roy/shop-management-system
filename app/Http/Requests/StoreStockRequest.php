@@ -13,7 +13,7 @@ class StoreStockRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,10 @@ class StoreStockRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'from_date' => 'nullable|date|before_or_equal:to_date',
+            'to_date' => 'nullable|date|after_or_equal:from_date',
+            'product_id' => 'nullable',
+            'type' => 'nullable'
         ];
     }
 }

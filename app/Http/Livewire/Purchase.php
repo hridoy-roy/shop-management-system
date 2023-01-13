@@ -36,9 +36,12 @@ class Purchase extends Component
 
         if (str_starts_with($name, 'product_id.')) {
             $nameKey = explode(".", $name);
-            $product = Product::find($value);
+            $product = Product::withSum('stock as total_in', 'product_in')
+                ->withSum('stock as total_out', 'product_out')
+                ->find($value);
             $this->productunit[$nameKey[1]] = $product->unit_name;
             $this->productCategory[$nameKey[1]] = $product->category->name;
+            $this->productAvailable[$nameKey[1]] = $product->total_in - $product->total_out;
         }
         if (str_starts_with($name, 'price.')) {
             $nameKey = explode(".", $name);
@@ -60,6 +63,7 @@ class Purchase extends Component
             DB::beginTransaction();
             $purchase = \App\Models\Purchase::create([
                 'purchase_num' => $this->purchaseId(),
+                'amount' =>  $this->finalTotal,
                 'created_by' => \Auth::user()->name,
             ]);
             $purchase->purchaseDetails()->createMany($this->purchseDetails($this->validate()));

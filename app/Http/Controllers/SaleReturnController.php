@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\SaleReturn;
 use App\Http\Requests\StoreSaleReturnRequest;
 use App\Http\Requests\UpdateSaleReturnRequest;
+use App\Models\SaleReturnDetail;
+use Illuminate\Database\Eloquent\Builder;
 
 class SaleReturnController extends Controller
 {
@@ -15,7 +18,20 @@ class SaleReturnController extends Controller
      */
     public function index()
     {
-        //
+        $data = [
+            'subTitle' => 'Sale Return list',
+            'title' => 'Sale Return',
+            'from_date' => date('Y-m-01'),
+            'to_date' => date('Y-m-d'),
+            'product_id' => '',
+            'products' => Product::where('status', '1')->get(),
+            'saleReturns' => SaleReturnDetail::whereHas(
+                'saleReturns', function (Builder $q) {
+                $q->whereDate('date', '>=', date('Y-m-01'))
+                    ->whereDate('date', '<=', date('Y-m-d'));
+            })->get(),
+        ];
+        return view('sale-return.list', $data);
     }
 
     /**
@@ -25,7 +41,11 @@ class SaleReturnController extends Controller
      */
     public function create()
     {
-        //
+        $data = [
+            'title' => 'Sale Return',
+            'subTitle' => 'Sale Return Info',
+        ];
+        return view('sale-return.create', $data);
     }
 
     /**
@@ -36,7 +56,34 @@ class SaleReturnController extends Controller
      */
     public function store(StoreSaleReturnRequest $request)
     {
-        //
+        if ($request->from_date && $request->to_date && $request->product_id) {
+            $saleReturns = SaleReturnDetail::whereHas(
+                'saleReturns', function (Builder $q) use ($request) {
+                $q->whereDate('date', '>=', $request->from_date)
+                    ->whereDate('date', '<=', $request->to_date);
+            })->where('product_id', $request->product_id)->get();
+        } elseif ($request->from_date && $request->to_date) {
+            $saleReturns = SaleReturnDetail::whereHas(
+                'saleReturns', function (Builder $q) use ($request) {
+                $q->whereDate('date', '>=', $request->from_date)
+                    ->whereDate('date', '<=', $request->to_date);
+            })->get();
+        } elseif ($request->product_id) {
+            $saleReturns = SaleReturnDetail::where('product_id', $request->product_id)->get();
+        } else {
+            $saleReturns = [];
+        }
+
+        $data = [
+            'subTitle' => 'Sale Return list',
+            'title' => 'Sale Return',
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'product_id' => $request->product_id,
+            'products' => Product::where('status', '1')->get(),
+            'saleReturns' => $saleReturns,
+        ];
+        return view('sale-return.list', $data);
     }
 
     /**

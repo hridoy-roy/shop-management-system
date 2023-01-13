@@ -10,8 +10,9 @@ trait PurchaseId
     public function purchaseId(): int|string|null
     {
         $purchaseId = Purchase::latest()->select('purchase_num')->first()->purchase_num ?? null;
+        $purchaseId = str_replace("P",'',$purchaseId);
         $purchaseId ? $purchaseId += 1 : $purchaseId = "000001";
 
-        return sprintf('%06s', $purchaseId);
+        return "P".sprintf('%06s', $purchaseId);
     }
 }

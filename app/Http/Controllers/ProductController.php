@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\ProductCategory;
+use Illuminate\Http\RedirectResponse;
 
 class ProductController extends Controller
 {
@@ -82,7 +83,7 @@ class ProductController extends Controller
      *
      * @param \App\Http\Requests\UpdateProductRequest $request
      * @param \App\Models\Product $product
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function update(StoreProductRequest $request, Product $product)
     {
@@ -100,9 +101,9 @@ class ProductController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\Models\Product $product
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): RedirectResponse
     {
         $destroy = $product->delete();
         if ($destroy) {
