@@ -12,6 +12,7 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\SaleReturnController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,6 +57,7 @@ Route::middleware('auth')->group(callback: function () {
         'accounts' => AccountController::class,
         'withdraw' => WithdrawController::class,
         'settings' => SettingController::class,
+        'users' => UserController::class,
     ]);
     Route::get('stock/present/list', [StockController::class, 'present'])->name('stock.present.list');
     Route::get('sales/hold/list', [SaleController::class, 'holdList'])->name('sale.hold.list');

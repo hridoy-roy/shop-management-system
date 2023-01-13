@@ -19,12 +19,15 @@ class UserFactory extends Factory
     public function definition()
 
     {
+//         'admin@themesbrand.com'
         return [
-            'name' => 'Admin',
-            'email' => 'admin@themesbrand.com',
+            'name' => $this->faker->name,
+            'email' => $this->faker->safeEmail,
+            'address' => $this->faker->paragraph(2,3),
             'email_verified_at' => now(),
             'password' => Hash::make(123456),
             'remember_token' => Str::random(10),
+            'created_by' => 'machine'
         ];
     }
 

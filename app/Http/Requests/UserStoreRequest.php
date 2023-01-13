@@ -3,17 +3,15 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules\File;
 
-class StoreCustomerRequest extends FormRequest
+class UserStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize(): bool
+    public function authorize()
     {
         return true;
     }
@@ -23,12 +21,10 @@ class StoreCustomerRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'name' => 'required',
-            'customer_id' => 'nullable',
-            'shop_name' => 'nullable',
             'address' => 'nullable',
             'phone' => 'nullable|number',
             'email' => 'nullable|email',

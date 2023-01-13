@@ -89,6 +89,15 @@
                         </li>
                     </ul>
                 </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="bx bx-share-alt"></i>
+                        <span key="t-multi-level">User Manage</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="true">
+                        <li><a href="{{route('users.index')}}" key="t-level-1-1">User list</a></li>
+                    </ul>
+                </li>
 
 
             </ul>

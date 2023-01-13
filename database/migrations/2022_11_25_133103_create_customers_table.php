@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(\App\Models\Customer::class)->nullable()->constrained()->cascadeOnUpdate();
             $table->string('name');
-            $table->date('joining_date')->nullable()->default(now());
+            $table->date('joining_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('shop_name')->nullable();
             $table->string('rating')->nullable();
             $table->string('phone')->nullable();
