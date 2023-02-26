@@ -5,7 +5,8 @@ var __webpack_exports__ = {};
   \***********************************************/
 $(document).ready(function () {
   $("#datatable").DataTable(), $("#datatable-buttons").DataTable({
-    lengthChange: !1,
+      ordering: false,
+      lengthChange: !1,
       buttons: [
           {
               extend:    'copyHtml5',

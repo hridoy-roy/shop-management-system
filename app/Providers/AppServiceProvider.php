@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Setting;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 

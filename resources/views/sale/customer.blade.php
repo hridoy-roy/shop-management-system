@@ -28,71 +28,109 @@
                     <p class="card-title-desc">
                         {{$subTitle}}
                     </p>
-                    @include('layouts.report-form', ['path' => 'sales.store'])
+                    <form class="row row-cols-lg-auto g-3 align-items-center justify-content-center mb-3"
+                          action="{{route('sale.customer.report')}}" method="post">
+                        @csrf
+                        <div class="col-12">
+                            <x-forms.input-date label="From Date" name="from_date" :required="false"
+                                                value="{{$from_date}}"></x-forms.input-date>
+                        </div>
+                        <div class="col-12">
+                            <x-forms.input-date label="To Date" name="to_date" :required="false"
+                                                value="{{$to_date}}"></x-forms.input-date>
+                        </div>
+
+                        <div class="col-12">
+                            <x-forms.select label="Customer Name" name="customer_id"
+                                            :options="$customers" value={{$customer_id}} ></x-forms.select>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary w-md mt-2">Submit</button>
+                        </div>
+                    </form>
+
+                    <div class="row text-center">
+                        <div class="col-md-4">
+                            <h4 class="card-title">Total Sale</h4>
+                            <strong class="font-size-24 text-primary">{{$sales ? $sales->sum('amount') : 0}}</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <h4 class="card-title">Total Sale Return</h4>
+                            <strong
+                                class="font-size-24 text-danger">{{$salesReturns ? $salesReturns->sum('amount') : 0}}</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <h4 class="card-title">Total</h4>
+                            <strong
+                                class="font-size-24 text-success">{{($sales ? $sales->sum('amount') : 0) - ($salesReturns ? $salesReturns->sum('amount') : 0)}}</strong>
+                        </div>
+                    </div>
+
+
                     <div class="table-responsive">
-                        <table id="datatable-buttons" class="table table-bordered text-center dt-responsive nowrap w-100">
+                        <h4 class="card-title">Sales</h4>
+                        <table id="datatable-buttons"
+                               class="table table-bordered text-center dt-responsive nowrap w-100">
                             <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Date</th>
+                                <th>Sale Number</th>
                                 <th>Discount</th>
                                 <th>Amount</th>
-                                <th>Sale Num</th>
-                                <th>Product</th>
-                                <th>QTY</th>
-                                <th>Unit</th>
                                 <th>Created By</th>
-                                <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
                             @forelse($sales as $sale)
-                                @foreach($sale->saleDetails as $saleDetail)
-                                    <tr>
-                                        @if($loop->first)
-                                            <th scope="row">{{++$loop->parent->index}}</th>
-                                            <td>{{$sale->date}}</td>
-                                            <td>{{$sale->discount}}</td>
-                                            <td>{{$sale->amount}}</td>
-                                        @else
-                                            <th></th>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                        @endif
-                                        <td>{{$sale->sale_num}}</td>
-                                        <td>{{$saleDetail->product->name}}</td>
-                                        <td>{{$saleDetail->qty}}</td>
-                                        <td>{{$saleDetail->product->unit_name}}</td>
-                                        @if($loop->first)
-                                            <td>{{$sale->created_by}}</td>
-                                            <td>
-                                                <a href="{{route('sale.invoice',$sale->id)}}" target="_blank"
-                                                   class="btn btn-primary waves-effect btn-label waves-light">
-                                                    <i class="bx bx-receipt label-icon"></i>Invoice
-                                                </a>
-                                            </td>
-                                        @else
-                                            <td></td>
-                                            <td></td>
-                                        @endif
-                                    </tr>
-                                @endforeach
+                                <tr>
+                                    <th scope="row">{{++$loop->index}}</th>
+                                    <td>{{$sale->date}}</td>
+                                    <td>{{$sale->sale_num}}</td>
+                                    <td>{{$sale->discount}}</td>
+                                    <td>{{$sale->amount}}</td>
+                                    <td>{{$sale->created_by}}</td>
+                                </tr>
                             @empty
                                 <tr class="text-center">
-                                    <td colspan="10"><strong class="text-danger">No Data</strong></td>
+                                    <td colspan="6"><strong class="text-danger">No Data</strong></td>
                                 </tr>
                             @endforelse
                             </tbody>
-                            <tfoot>
-                            <tr>
-                                <th colspan="7" style="text-align:right">Total:</th>
-                                <th colspan="3"></th>
-                            </tr>
-                            </tfoot>
                         </table>
                     </div>
-
+                    <br>
+                    <div class="table-responsive">
+                        <h4 class="card-title">Sales Return</h4>
+                        <table id="datatable-buttons"
+                               class="table table-bordered text-center dt-responsive nowrap w-100">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Date</th>
+                                <th>Sale Return Num</th>
+                                <th>Amount</th>
+                                <th>Created By</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @forelse($salesReturns as $salesReturn)
+                                <tr>
+                                    <th scope="row">{{++$loop->index}}</th>
+                                    <td>{{$salesReturn->date}}</td>
+                                    <td>{{$salesReturn->sale_return_num}}</td>
+                                    <td>{{$salesReturn->amount}}</td>
+                                    <td>{{$salesReturn->created_by}}</td>
+                                </tr>
+                            @empty
+                                <tr class="text-center">
+                                    <td colspan="5"><strong class="text-danger">No Data</strong></td>
+                                </tr>
+                            @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

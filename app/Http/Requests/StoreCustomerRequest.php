@@ -30,7 +30,7 @@ class StoreCustomerRequest extends FormRequest
             'customer_id' => 'nullable',
             'shop_name' => 'nullable',
             'address' => 'nullable',
-            'phone' => 'nullable|number',
+            'phone' => 'nullable|integer',
             'email' => 'nullable|email',
             'joining_date' => 'nullable|date',
             'avatar' => 'nullable|image|max:1024',

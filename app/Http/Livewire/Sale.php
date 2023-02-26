@@ -30,12 +30,19 @@ class Sale extends Component
     public $saleId;
     public $sale;
     public $productAvailable;
+    public $purchasePrice;
+    public $showPrice = true;
 
     protected $rules = [
         'product_id.*' => 'required',
         'price.*' => 'required|regex:/^\d+(\.\d{1,2})?$/',
         'quantity.*' => 'required|integer',
     ];
+
+    public function togglePrice()
+    {
+        $this->showPrice ? $this->showPrice = false : $this->showPrice = true;
+    }
 
 
     public function updated($name, $value)
@@ -49,6 +56,7 @@ class Sale extends Component
                 ->find($value);
             $this->productunit[$nameKey[1]] = $product->unit_name;
             $this->productCategory[$nameKey[1]] = $product->category->name;
+            $this->purchasePrice[$nameKey[1]] = $product->price;
             $this->productAvailable[$nameKey[1]] = $product->total_in - $product->total_out;
         }
         if (str_starts_with($name, 'price.')) {
@@ -109,9 +117,9 @@ class Sale extends Component
                 'type' => $this->type,
                 'updated_by' => \Auth::user()->name,
             ]);
-            if ($this->sale->saleDetails){
-                foreach ($this->sale->saleDetails as $saleDetail){
-                    if($saleDetail->stock)
+            if ($this->sale->saleDetails) {
+                foreach ($this->sale->saleDetails as $saleDetail) {
+                    if ($saleDetail->stock)
                         $saleDetail->stock->delete();
                 }
             }

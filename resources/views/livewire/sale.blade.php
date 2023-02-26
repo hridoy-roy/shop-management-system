@@ -42,6 +42,15 @@
                                     <i class="fas fa-plus-circle"></i>
                                     Row
                                 </span>
+                                <span data-bs-original-title="Toggle Price" class="btn btn-danger mt-3 me-3 mt-lg-0 float-end"
+                                      wire:click="togglePrice()">
+                                    @if($showPrice)
+                                    <i class="fas fa-eye"></i>
+                                    @else
+                                    <i class="fas fa-eye-slash"></i>
+                                    @endif
+                                    Price
+                                </span>
                                 <div wire:loading class="spinner-border spinner-border-sm text-dark">
                                     <span class="sr-only">Loading...</span>
                                 </div>
@@ -67,12 +76,26 @@
                                         </p>
                                     </div>
                                 </div>
+                                <div class="col-lg-1">
+                                    <div class="mb-3">
+                                        <label>P. Price</label>
+                                        <p class="form-control">
+                                            <strong>
+                                                @if($showPrice)
+                                                {{$purchasePrice[$key] ?? 0}}
+                                                @else
+                                                <i class="fas fa-eye-slash text-danger"></i>
+                                                @endif
+                                            </strong>
+                                        </p>
+                                    </div>
+                                </div>
                                 <div class="col-lg-2">
                                     <x-forms.input label="Price" type="number" name="price.{{$key}}"
                                                    placeholder="Price"></x-forms.input>
                                 </div>
 
-                                <div class="col-lg-2">
+                                <div class="col-lg-1">
                                     <x-forms.input label="Quantity" type="number" name="quantity.{{$key}}"
                                                    placeholder="Quantity"></x-forms.input>
                                 </div>

@@ -44,7 +44,6 @@ class CustomerController extends Controller
      */
     public function store(StoreCustomerRequest $request)
     {
-
         Customer::create(array_merge($request->validated(), ['created_by' => \Auth::user()->name]));
         toastr()->success('Data has been saved successfully!');
         return redirect()->back();

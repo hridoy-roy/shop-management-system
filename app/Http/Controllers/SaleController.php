@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Http\Requests\StoreSaleRequest;
 use App\Http\Requests\UpdateSaleRequest;
 use App\Models\SaleDetail;
+use App\Models\SaleReturn;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\True_;
 
 class SaleController extends Controller
@@ -20,7 +23,7 @@ class SaleController extends Controller
      *
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(): View|Factory|Application
     {
         $data = [
             'subTitle' => 'Sale list',
@@ -29,12 +32,9 @@ class SaleController extends Controller
             'to_date' => date('Y-m-d'),
             'product_id' => '',
             'products' => Product::where('status', '1')->get(),
-            'sales' => SaleDetail::whereHas(
-                'sale', function (Builder $q) {
-                $q->whereDate('date', '>=', date('Y-m-01'))
-                    ->whereDate('date', '<=', date('Y-m-d'))
-                    ->where('type', 'Cash');
-            })->get(),
+            'sales' => Sale::whereDate('date', '>=', date('Y-m-01'))
+                ->whereDate('date', '<=', date('Y-m-d'))
+                ->where('type', 'Cash')->latest()->get(),
         ];
         return view('sale.list', $data);
     }
@@ -57,29 +57,26 @@ class SaleController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \App\Http\Requests\StoreSaleRequest $request
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
-    public function store(StoreSaleRequest $request)
+    public function store(StoreSaleRequest $request): View|Factory|Application
     {
         if ($request->from_date && $request->to_date && $request->product_id) {
-            $sales = SaleDetail::whereHas(
-                'sale', function (Builder $q) use ($request) {
-                $q->whereDate('date', '>=', $request->from_date)
-                    ->whereDate('date', '<=', $request->to_date)
-                    ->where('type', 'Cash');
-            })->where('product_id', $request->product_id)->get();
+            $sales = Sale::whereHas(
+                'saleDetails', function (Builder $q) use ($request) {
+                $q->where('product_id', $request->product_id);
+            })->whereDate('date', '>=', $request->from_date)
+                ->whereDate('date', '<=', $request->to_date)
+                ->where('type', 'Cash')->get();
         } elseif ($request->from_date && $request->to_date) {
-            $sales = SaleDetail::whereHas(
-                'sale', function (Builder $q) use ($request) {
-                $q->whereDate('date', '>=', $request->from_date)
-                    ->whereDate('date', '<=', $request->to_date)
-                    ->where('type', 'Cash');
-            })->get();
+            $sales = Sale::whereDate('date', '>=', $request->from_date)
+                ->whereDate('date', '<=', $request->to_date)
+                ->where('type', 'Cash')->get();
         } elseif ($request->product_id) {
-            $sales = SaleDetail::whereHas(
-                'sale', function (Builder $q) use ($request) {
-                $q->where('type', 'Cash');
-            })->where('product_id', $request->product_id)->get();
+            $sales = Sale::whereHas(
+                'saleDetails', function (Builder $q) use ($request) {
+                $q->where('product_id', $request->product_id);
+            })->where('type', 'Cash')->get();
         } else {
             $sales = [];
         }
@@ -87,9 +84,9 @@ class SaleController extends Controller
         $data = [
             'subTitle' => 'Sale list',
             'title' => 'Sale',
-            'from_date' => date('Y-m-01'),
-            'to_date' => date('Y-m-d'),
-            'product_id' => '',
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'product_id' => $request->product_id,
             'products' => Product::where('status', '1')->get(),
             'sales' => $sales,
         ];
@@ -143,9 +140,9 @@ class SaleController extends Controller
      */
     public function destroy(Sale $sale): bool
     {
-        if ($sale->saleDetails){
-            foreach ($sale->saleDetails as $saleDetail){
-                if($saleDetail->stock)
+        if ($sale->saleDetails) {
+            foreach ($sale->saleDetails as $saleDetail) {
+                if ($saleDetail->stock)
                     $saleDetail->stock->delete();
             }
         }
@@ -165,7 +162,7 @@ class SaleController extends Controller
 
     public function holdConfirm($id)
     {
-        return  Sale::find($id)->update(['type' => 'Cash']);
+        return Sale::find($id)->update(['type' => 'Cash']);
     }
 
     public function dueList(): Factory|View|Application
@@ -180,7 +177,124 @@ class SaleController extends Controller
 
     public function dueConfirm($id)
     {
-        return  Sale::find($id)->update(['type' => 'Cash']);
+        return Sale::find($id)->update(['type' => 'Cash']);
+    }
+
+    public function saleCustomerReport(): Factory|View|Application
+    {
+        $data = [
+            'subTitle' => 'Sale Customer Report',
+            'title' => 'Sale Customer',
+            'from_date' => '',
+            'to_date' => '',
+            'customer_id' => null,
+            'customers' => Customer::where('status', '1')->get(),
+            'sales' => [],
+            'salesReturns' => [],
+        ];
+        return view('sale.customer', $data);
+    }
+
+    public function saleCustomerReportPost(Request $request): Factory|View|Application
+    {
+
+        $this->validate($request, [
+            'from_date' => 'nullable|date|before_or_equal:to_date',
+            'to_date' => 'nullable|date|after_or_equal:from_date',
+            'customer_id' => 'required',
+        ]);
+
+
+        if ($request->from_date && $request->to_date && $request->customer_id) {
+            $sales = Sale::where('customer_id', $request->customer_id)
+                ->whereDate('date', '>=', $request->from_date)
+                ->whereDate('date', '<=', $request->to_date)->get();
+            $saleReturns = SaleReturn::where('customer_id', $request->customer_id)
+                ->whereDate('date', '>=', $request->from_date)
+                ->whereDate('date', '<=', $request->to_date)->get();
+
+        } elseif ($request->customer_id) {
+            $sales = Sale::where('customer_id', $request->customer_id)->get();
+            $saleReturns = SaleReturn::where('customer_id', $request->customer_id)->get();
+        } else {
+            $sales = [];
+            $saleReturns = [];
+        }
+
+        $data = [
+            'subTitle' => 'Sale Customer Report',
+            'title' => 'Sale Customer',
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'customer_id' => $request->customer_id,
+            'customers' => Customer::where('status', '1')->get(),
+            'sales' => $sales,
+            'salesReturns' => $saleReturns,
+        ];
+
+        return view('sale.customer', $data);
+    }
+
+    public function saleReferenceReport(): Factory|View|Application
+    {
+        $data = [
+            'subTitle' => 'Sale Reference Report',
+            'title' => 'Sale Reference',
+            'from_date' => '',
+            'to_date' => '',
+            'customer_id' => null,
+            'customers' => Customer::where('status', '1')->get(),
+            'sales' => [],
+            'salesReturns' => [],
+        ];
+        return view('sale.reference', $data);
+    }
+
+    public function saleReferenceReportPost(Request $request): Factory|View|Application
+    {
+        $this->validate($request, [
+            'from_date' => 'nullable|date|before_or_equal:to_date',
+            'to_date' => 'nullable|date|after_or_equal:from_date',
+            'customer_id' => 'required',
+        ]);
+
+        $reference =  Customer::find($request->customer_id) ?? null;
+
+        if ($request->from_date && $request->to_date && $reference) {
+            $sales = Sale::where('customer_id', $request->customer_id)
+                ->whereDate('date', '>=', $request->from_date)
+                ->whereDate('date', '<=', $request->to_date)->get();
+            $saleReturns = SaleReturn::where('customer_id', $request->customer_id)
+                ->whereDate('date', '>=', $request->from_date)
+                ->whereDate('date', '<=', $request->to_date)->get();
+
+        } elseif ($reference) {
+            $customerSales = $reference->customers->has('sales');
+            $customerSaleReturns = $reference->customers->has('saleReturns');
+        }
+
+        $data = [
+            'subTitle' => 'Sale Reference Report',
+            'title' => 'Sale Reference',
+            'from_date' => $request->from_date,
+            'to_date' => $request->to_date,
+            'customer_id' => $request->customer_id,
+            'customers' => Customer::where('status', '1')->get(),
+            'customerSales' => $customerSales ?? [],
+            'customerSaleReturns' => $customerSaleReturns ?? [],
+        ];
+        return view('sale.reference', $data);
+    }
+
+    public function invoice($id): Factory|View|Application
+    {
+        $data = [
+            'subTitle' => 'Sale Invoice',
+            'title' => 'Invoice',
+            'sales' => Sale::find($id),
+        ];
+
+        return view('sale.invoice', $data);
     }
 
 }

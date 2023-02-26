@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +22,7 @@ class CustomerFactory extends Factory
             'address' => fake()->address(),
             'joining_date' => fake()->dateTimeBetween(),
             'rating' => fake()->numberBetween(1,5),
-            'phone' => fake()->e164PhoneNumber(),
+            'phone' => fake()->PhoneNumber(),
             'email' => fake()->safeEmail(),
             'created_by' => 'Admin Seeder',
         ];

@@ -16,18 +16,15 @@
             max-width: 205px;
             margin: 50px auto;
         }
-
         .avatar-upload .avatar-edit {
             position: absolute;
             right: 12px;
             z-index: 1;
             top: 10px;
         }
-
         .avatar-upload .avatar-edit input {
             display: none;
         }
-
         .avatar-upload .avatar-edit input + label {
             display: inline-block;
             width: 34px;
@@ -41,12 +38,10 @@
             font-weight: normal;
             transition: all .2s ease-in-out;
         }
-
         .avatar-upload .avatar-edit input + label:hover {
             background: #f1f1f1;
             border-color: #d6d6d6;
         }
-
         .avatar-upload .avatar-edit input + label:after {
             content: "\f040";
             font-family: 'FontAwesome';
@@ -58,7 +53,6 @@
             text-align: center;
             margin: auto;
         }
-
         .avatar-upload .avatar-preview {
             width: 192px;
             height: 192px;
@@ -67,7 +61,6 @@
             border: 6px solid #F8F8F8;
             box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
         }
-
         .avatar-upload .avatar-preview > div {
             width: 100%;
             height: 100%;
@@ -76,7 +69,6 @@
             background-repeat: no-repeat;
             background-position: center;
         }
-
     </style>
 @endsection
 @section('content')
@@ -103,15 +95,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-8">
-                            <div class="text-sm-end">
-                                <button type="button"
-                                        class="btn btn-success btn-rounded waves-effect waves-light mb-2 me-2"
-                                        data-bs-toggle="modal" data-bs-target=".user-modal-xl"><i
-                                        class="mdi mdi-plus me-1"></i> New Staff Add
-                                </button>
-                            </div>
-                        </div><!-- end col-->
                     </div>
 
                     <div class="table-responsive">
@@ -124,10 +107,9 @@
                                 <th>Phone / Email</th>
                                 <th>Address</th>
                                 <th>Photo</th>
-                                <th>Action</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="text-danger">
                             @forelse($users as $user)
                                 <tr>
                                     <td>{{++$loop->index}}</td>
@@ -147,23 +129,6 @@
                                     <td>{{$user->address ?? 'N/A'}}</td>
                                     <td>
                                         <img class="rounded-circle header-profile-user" src="{{asset($user->avatar)}}" alt="User Avatar">
-                                    </td>
-                                    <td>
-                                        <div class="dropdown">
-                                            <a href="#" class="dropdown-toggle card-drop" data-bs-toggle="dropdown"
-                                               aria-expanded="false">
-                                                <i class="mdi mdi-dots-horizontal font-size-18"></i>
-                                            </a>
-                                            <ul class="dropdown-menu dropdown-menu-end">
-                                                <li><a href="{{route('users.edit',$user->id)}}"
-                                                       class="dropdown-item"><i
-                                                            class="mdi mdi-pencil font-size-16 text-success me-1"></i>
-                                                        Edit</a></li>
-                                                <li><a href="#" class="dropdown-item" onclick="staffDelete({{$user->id}})" ><i
-                                                            class="mdi mdi-trash-can font-size-16 text-danger me-1"></i>
-                                                        Delete</a></li>
-                                            </ul>
-                                        </div>
                                     </td>
                                 </tr>
                             @empty
@@ -199,72 +164,6 @@
     </div>
     <!-- end row -->
 
-    <!--  Extra Large modal example -->
-    <div class="modal fade user-modal-xl" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="myExtraLargeModalLabel">Create New Customer</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="{{route('users.store')}}" method="Post" enctype="multipart/form-data">
-                        @csrf
-                        <div class="row">
-                            <div class="col-md-6">
-                                <x-forms.input label="Full Name" type="text" name="name"
-                                               placeholder="Full Name"></x-forms.input>
-                            </div>
-                            <div class="col-md-6">
-                                <x-forms.input-date label="Joining Date" name="joining_date" :required="false"
-                                                    value="{{now('Asia/Dhaka')}}"></x-forms.input-date>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <x-forms.input label="Phone Number" type=number name="phone"
-                                               placeholder="Phone Number 11 Digits" :required=false></x-forms.input>
-                            </div>
-                            <div class="col-md-6">
-                                <x-forms.input label="Email Address" type=email name="email"
-                                               placeholder="Email Address"></x-forms.input>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <x-forms.textarea label="Customer Address" type="text" name="address" :required=false
-                                                  placeholder="Customer Address"></x-forms.textarea>
-                            </div>
-                            <div class="col-md-6">
-                                <level class="text-center">Customer Image</level>
-                                <div class="avatar-upload">
-                                    <div class="avatar-edit">
-                                        <input type='file' name="avatar" id="imageUpload" accept=".png, .jpg, .jpeg"/>
-                                        <label for="imageUpload"></label>
-                                    </div>
-                                    <div class="avatar-preview">
-                                        <div id="imagePreview"
-                                             style="background-image: url(http://i.pravatar.cc/500);">
-                                        </div>
-                                    </div>
-                                </div>
-                                @error('avatar')
-                                <div class="is-invalid">
-                                    {{$message}}
-                                </div>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary w-md">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
 @endsection
 @section('script')
     <script src="{{ asset('assets/libs/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
@@ -290,49 +189,4 @@
 
     <!-- Sweet alert init js-->
     <script src="{{ asset('assets/js/pages/sweet-alerts.init.js') }}"></script>
-@endsection
-
-@section('script-bottom')
-    <script>
-        function staffDelete(Id) {
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You would be able to revert this!",
-                icon: "warning",
-                showCancelButton: !0,
-                confirmButtonText: "Yes, delete it!",
-                cancelButtonText: "No, cancel!",
-                confirmButtonClass: "btn btn-success mt-2",
-                cancelButtonClass: "btn btn-danger ms-2 mt-2",
-                buttonsStyling: !1
-            }).then(function (t) {
-                t.value ?  $.ajax({
-                    url: "{{ url('users') }}" + "/" + Id,
-                    type: "delete",
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                    },
-                    success: function (response) {
-                        Swal.fire({
-                            title: "Deleted!",
-                            text: "User Info has been deleted.",
-                            icon: "success",
-                        });
-                        setTimeout(location.reload.bind(location), 2000);
-                    },
-                    error: function (response) {
-                        Swal.fire({
-                            title: "Error",
-                            text: "User Delete Fail",
-                            icon: "error"
-                        });
-                    }
-                }): t.dismiss === Swal.DismissReason.cancel && Swal.fire({
-                    title: "Cancelled",
-                    text: "User Delete Cancelled",
-                    icon: "error"
-                });
-            });
-        }
-    </script>
 @endsection

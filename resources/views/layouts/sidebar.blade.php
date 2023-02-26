@@ -19,6 +19,7 @@
                         <li><a href="{{route('withdraw.hold.list')}}" key="t-level-1-1">Cash Withdraw Hold</a></li>
                         <li><a href="{{route('balance.sheet')}}" key="t-level-1-1">Balance Sheet</a></li>
                         <li><a href="{{route('profit.loss')}}" key="t-level-1-1">Profit & Loss Reports</a></li>
+                        <li><a href="{{route('accounts.index')}}" key="t-level-1-1">Profit & Loss Date Reports</a></li>
                     </ul>
                 </li>
                 <li>
@@ -74,6 +75,8 @@
                         <li><a href="{{route('sale.hold.list')}}" key="t-level-1-1">Sales Hold</a></li>
                         <li><a href="{{route('sale.due.list')}}" key="t-level-1-1">Sales Due</a></li>
                         <li><a href="{{route('sales.index')}}" key="t-level-1-1">Sales Reports</a></li>
+                        <li><a href="{{route('sale.customer.report')}}" key="t-level-1-1">Sales Customer Reports</a></li>
+                        <li><a href="{{route('sale.reference.report')}}" key="t-level-1-1">Sales Reference Reports</a></li>
                     </ul>
                 </li>
                 <li>
@@ -95,7 +98,8 @@
                         <span key="t-multi-level">User Manage</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="{{route('users.index')}}" key="t-level-1-1">User list</a></li>
+                        <li><a href="{{route('users.index')}}" key="t-level-1-1">Users list</a></li>
+                        <li><a href="{{route('users.deleted')}}" key="t-level-1-1">Deleted Users list</a></li>
                     </ul>
                 </li>
 

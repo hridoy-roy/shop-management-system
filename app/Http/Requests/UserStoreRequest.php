@@ -25,10 +25,10 @@ class UserStoreRequest extends FormRequest
     {
         return [
             'name' => 'required',
+            'email' => 'required|email',
+            'joining_date' => 'required|date',
             'address' => 'nullable',
-            'phone' => 'nullable|number',
-            'email' => 'nullable|email',
-            'joining_date' => 'nullable|date',
+            'phone' => 'nullable|integer',
             'avatar' => 'nullable|image|max:1024',
         ];
     }

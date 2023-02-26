@@ -59,15 +59,26 @@ Route::middleware('auth')->group(callback: function () {
         'settings' => SettingController::class,
         'users' => UserController::class,
     ]);
+//    Stock
     Route::get('stock/present/list', [StockController::class, 'present'])->name('stock.present.list');
+//    sales
     Route::get('sales/hold/list', [SaleController::class, 'holdList'])->name('sale.hold.list');
     Route::Post('sales/hold/confirm/{id}', [SaleController::class, 'holdConfirm'])->name('sale.hold.confirm');
     Route::get('sales/due/list', [SaleController::class, 'dueList'])->name('sale.due.list');
     Route::Post('sales/due/confirm/{id}', [SaleController::class, 'dueConfirm'])->name('sale.due.confirm');
+    Route::get('sales/customer/report', [SaleController::class, 'saleCustomerReport'])->name('sale.customer.report');
+    Route::Post('sales/customer/report', [SaleController::class, 'saleCustomerReportPost'])->name('sale.customer.report');
+    Route::get('sales/reference/report', [SaleController::class, 'saleReferenceReport'])->name('sale.reference.report');
+    Route::Post('sales/reference/report', [SaleController::class, 'saleReferenceReportPost'])->name('sale.reference.report');
+    Route::get('sale/invoice/{id}', [SaleController::class, 'invoice'])->name('sale.invoice');
+//    withdraw
     Route::get('withdraw/hold/list', [WithdrawController::class, 'holdList'])->name('withdraw.hold.list');
     Route::Post('withdraw/hold/confirm/{id}', [WithdrawController::class, 'holdConfirm'])->name('withdraw.hold.confirm');
+//    account
     Route::get('balance-sheet', [AccountController::class, 'balanceSheet'])->name('balance.sheet');
     Route::get('profit-loss', [AccountController::class, 'profitLoss'])->name('profit.loss');
+//    user
+    Route::get('user/deleted', [UserController::class, 'userDeleted'])->name('users.deleted');
 });
 
 require __DIR__ . '/auth.php';

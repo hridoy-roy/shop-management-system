@@ -32,6 +32,8 @@ trait Repeater
             unset($this->total[$key]);
         if (isset($this->productAvailable[$key]))
             unset($this->productAvailable[$key]);
+        if (isset($this->purchasePrice[$key]))
+            unset($this->purchasePrice[$key]);
 
     }
 

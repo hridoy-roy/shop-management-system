@@ -28,6 +28,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
