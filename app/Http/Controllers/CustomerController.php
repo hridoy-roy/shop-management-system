@@ -21,7 +21,7 @@ class CustomerController extends Controller
         $data = [
             'subTitle' => 'Customer list',
             'title' => 'Customer',
-            'customers' => Customer::latest()->take(200)->get(),
+            'customers' => Customer::paginate(4),
         ];
         return view('customer.index', $data);
     }

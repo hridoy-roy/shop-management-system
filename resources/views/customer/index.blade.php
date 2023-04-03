@@ -136,10 +136,10 @@
                                     <td>{{++$loop->index}}</td>
                                     <td>{{$customer->name}}
                                         @php
-                                        $jd = \Illuminate\Support\Carbon::create($customer->joining_date);
+                                            $jd = \Illuminate\Support\Carbon::create($customer->joining_date);
                                         @endphp
                                         @if($jd->diffInDays(now('Asia/Dhaka')) < $utility::$newStatusDayValue)
-                                        <span class="badge rounded-pill bg-success float-end"  key="t-new">New</span>
+                                            <span class="badge rounded-pill bg-success float-end" key="t-new">New</span>
                                         @endif
                                     </td>
                                     <td>{{$customer->shop_name ?? 'N/A'}}</td>
@@ -150,7 +150,8 @@
 
                                     <td>{{$customer->address ?? 'N/A'}}</td>
                                     <td>{{$customer->reference->name ?? 'N/A'}}</td>
-                                    <td>{{$customer->joining_date}} / {{$jd->diffForHumans(['parts' => 2,'short' => true])}}</td>
+                                    <td>{{$customer->joining_date}}
+                                        / {{$jd->diffForHumans(['parts' => 2,'short' => true])}}</td>
                                     <td>
                                         <div class="dropdown">
                                             <a href="#" class="dropdown-toggle card-drop" data-bs-toggle="dropdown"
@@ -162,7 +163,8 @@
                                                        class="dropdown-item"><i
                                                             class="mdi mdi-pencil font-size-16 text-success me-1"></i>
                                                         Edit</a></li>
-                                                <li><a href="#" class="dropdown-item" onclick="customerDelete({{$customer->id}})" ><i
+                                                <li><a href="#" class="dropdown-item"
+                                                       onclick="customerDelete({{$customer->id}})"><i
                                                             class="mdi mdi-trash-can font-size-16 text-danger me-1"></i>
                                                         Delete</a></li>
                                             </ul>
@@ -180,18 +182,17 @@
                         </table>
                     </div>
                     <ul class="pagination pagination-rounded justify-content-end mb-2">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="javascript: void(0);" aria-label="Previous">
+                        <li class="page-item">
+                            <a class="page-link" href="{{$customers->previousPageUrl()}}" aria-label="Previous">
                                 <i class="mdi mdi-chevron-left"></i>
                             </a>
                         </li>
-                        <li class="page-item active"><a class="page-link" href="javascript: void(0);">1</a></li>
-                        <li class="page-item"><a class="page-link" href="javascript: void(0);">2</a></li>
-                        <li class="page-item"><a class="page-link" href="javascript: void(0);">3</a></li>
-                        <li class="page-item"><a class="page-link" href="javascript: void(0);">4</a></li>
-                        <li class="page-item"><a class="page-link" href="javascript: void(0);">5</a></li>
+                        @for($i = 1; $i<= $customers->count();$i++)
+                            <li class="page-item @if($customers->currentPage() == $i) active @endif"><a class="page-link" href="{{$customers->url($i)}}">{{$i}}</a>
+                            </li>
+                        @endfor
                         <li class="page-item">
-                            <a class="page-link" href="javascript: void(0);" aria-label="Next">
+                            <a class="page-link" href="{{$customers->nextPageUrl()}}" aria-label="Next">
                                 <i class="mdi mdi-chevron-right"></i>
                             </a>
                         </li>
@@ -320,7 +321,7 @@
                 cancelButtonClass: "btn btn-danger ms-2 mt-2",
                 buttonsStyling: !1
             }).then(function (t) {
-                t.value ?  $.ajax({
+                t.value ? $.ajax({
                     url: "{{ url('customer') }}" + "/" + Id,
                     type: "delete",
                     data: {
@@ -341,7 +342,7 @@
                             icon: "error"
                         });
                     }
-                }): t.dismiss === Swal.DismissReason.cancel && Swal.fire({
+                }) : t.dismiss === Swal.DismissReason.cancel && Swal.fire({
                     title: "Cancelled",
                     text: "Customer Delete Cancelled",
                     icon: "error"
